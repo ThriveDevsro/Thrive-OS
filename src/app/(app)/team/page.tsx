@@ -7,18 +7,13 @@ import {
   UserRoundCheck,
   UsersRound,
 } from "lucide-react";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { updateTeamMember } from "./actions";
 import { MemberModal } from "./member-modal";
 import { requireFounder } from "@/lib/role-access";
 
 export default async function TeamPage() {
-  await requireFounder();
-  const session = await auth();
-  const workspace = await prisma.workspace.findUnique({
-    where: { slug: "thrive-dev" },
-  });
+  const { session, workspace } = await requireFounder();
   const [users, roles] = await Promise.all([
     prisma.user.findMany({
       where: { workspaceId: workspace?.id },

@@ -11,14 +11,16 @@ export type TeamState = { ok?: string; error?: string };
 
 async function founderContext() {
   const session = await auth();
-  if (session?.user.role !== "founder") return null;
+  if (!session?.user.workspaceId || session.user.role !== "founder") return null;
   const workspace = await prisma.workspace.findUnique({
-    where: { slug: "thrive-dev" },
+    where: { id: session.user.workspaceId },
   });
   const actor = await prisma.user.findFirst({
     where: {
+      id: session.user.id,
       workspaceId: workspace?.id,
-      email: session.user.email ?? undefined,
+      status: "ACTIVE",
+      roles: { some: { role: { key: "founder" } } },
     },
   });
   return workspace && actor ? { workspace, actor } : null;
