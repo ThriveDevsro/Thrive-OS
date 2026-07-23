@@ -76,8 +76,16 @@ export function AppShell({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(initialSidebarCollapsed ?? false);
+  const [pendingNavigation, setPendingNavigation] = useState<{
+    from: string;
+    to: string;
+  } | null>(null);
+  const displayedPathname =
+    pendingNavigation?.from === pathname ? pendingNavigation.to : pathname;
+  const navigationPending =
+    pendingNavigation?.from === pathname && pendingNavigation.to !== pathname;
   const active = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+    displayedPathname === href || displayedPathname.startsWith(`${href}/`);
   const visibleNav =
     role === "founder"
       ? nav
@@ -121,7 +129,9 @@ export function AppShell({
   }
 
   return (
-    <div className={`app-frame ${collapsed ? "sidebar-collapsed" : ""}`}>
+    <div
+      className={`app-frame ${collapsed ? "sidebar-collapsed" : ""} ${navigationPending ? "navigation-pending" : ""}`}
+    >
       <aside className="sidebar desktop-sidebar" aria-label="Main navigation">
         <div className="sidebar-head">
           <Link href="/dashboard" className="logo">
@@ -149,8 +159,11 @@ export function AppShell({
               href={href}
               prefetch={highPriorityRoutes.has(href) ? true : undefined}
               title={collapsed ? label : undefined}
-              onClick={() => setOpen(false)}
+              onNavigate={() =>
+                setPendingNavigation({ from: pathname, to: href })
+              }
               className={active(href) ? "active" : ""}
+              aria-current={active(href) ? "page" : undefined}
             >
               <Icon size={19} />
               <span>{label}</span>
@@ -207,8 +220,12 @@ export function AppShell({
                   key={href}
                   href={href}
                   prefetch={highPriorityRoutes.has(href) ? true : undefined}
-                  onClick={() => setOpen(false)}
+                  onNavigate={() => {
+                    setPendingNavigation({ from: pathname, to: href });
+                    setOpen(false);
+                  }}
                   className={active(href) ? "active" : ""}
+                  aria-current={active(href) ? "page" : undefined}
                 >
                   <Icon size={20} />
                   <span>{label}</span>
@@ -256,7 +273,11 @@ export function AppShell({
               key={href}
               href={href}
               prefetch
+              onNavigate={() =>
+                setPendingNavigation({ from: pathname, to: href })
+              }
               className={active(href) ? "active" : ""}
+              aria-current={active(href) ? "page" : undefined}
             >
               <Icon size={20} />
               <span>{label === "Lead Radar" ? "Leads" : label}</span>
