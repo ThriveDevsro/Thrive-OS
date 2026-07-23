@@ -1,10 +1,10 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { getAccessContextOrNull } from "@/lib/role-access";
 
-async function context(){const session=await auth();if(!session?.user)return null;const workspace=await prisma.workspace.findUnique({where:{slug:"thrive-dev"}});const user=await prisma.user.findFirst({where:{workspaceId:workspace?.id,email:session.user.email??undefined}});return workspace&&user?{workspace,user}:null}
+const context = getAccessContextOrNull;
 const input=z.object({title:z.string().trim().min(2).max(180),type:z.string().min(2),dueAt:z.string().min(1).transform(v=>new Date(v)),priority:z.enum(["LOW","NORMAL","HIGH","URGENT"]),companyId:z.string().uuid().optional().or(z.literal("")).transform(v=>v||undefined),notes:z.string().trim().max(2000).optional().transform(v=>v||undefined)});
 export async function createTask(formData:FormData){const ctx=await context();if(!ctx)return;const parsed=input.safeParse(Object.fromEntries(formData));if(!parsed.success)return;const task=await prisma.$transaction(async tx=>{const created=await tx.task.create({data:{...parsed.data,workspaceId:ctx.workspace.id,assigneeId:ctx.user.id,createdById:ctx.user.id}});await tx.auditLog.create({data:{workspaceId:ctx.workspace.id,userId:ctx.user.id,action:"task.created",recordType:"Task",recordId:created.id,source:"MANUAL",newValue:{title:created.title,dueAt:created.dueAt.toISOString()}}});return created});void task;revalidatePath("/tasks")}
 export async function completeTask(formData:FormData){const ctx=await context();if(!ctx)return;const id=String(formData.get("id")??"");const task=await prisma.task.findFirst({where:{id,workspaceId:ctx.workspace.id}});if(!task)return;await prisma.$transaction([prisma.task.update({where:{id},data:{status:"COMPLETED",completedAt:new Date()}}),prisma.auditLog.create({data:{workspaceId:ctx.workspace.id,userId:ctx.user.id,action:"task.completed",recordType:"Task",recordId:id,source:"MANUAL",oldValue:{status:task.status},newValue:{status:"COMPLETED"}}})]);revalidatePath("/tasks")}

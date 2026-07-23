@@ -9,10 +9,11 @@ import {
   Send,
   Settings2,
 } from "lucide-react";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { ComposeModal } from "./compose-modal";
 import { replyToConversation, setConversationStatus } from "./actions";
+import { getAccessContext } from "@/lib/role-access";
+import { measureServerOperation } from "@/lib/performance";
 
 export default async function InboxPage({
   searchParams,
@@ -25,14 +26,11 @@ export default async function InboxPage({
   }>;
 }) {
   const params = await searchParams;
-  const session = await auth();
-  const workspace = await prisma.workspace.findUnique({
-    where: { slug: "thrive-dev" },
-  });
+  const { session, workspace } = await getAccessContext();
   const status = params.status === "closed" ? "CLOSED" : "OPEN";
   const q = params.q?.trim() ?? "";
   const draftAction =
-    params.draft && workspace && session?.user?.email
+    params.draft && session.user.email
       ? await prisma.aIAction.findFirst({
           where: {
             id: params.draft,
@@ -45,19 +43,19 @@ export default async function InboxPage({
         })
       : null;
   const draft = draftFromPreview(draftAction?.preview);
-  const threads = await prisma.emailThread.findMany({
+  const threads = await measureServerOperation("route:inbox:threads",()=>prisma.emailThread.findMany({
     where: {
-      workspaceId: workspace?.id,
+      workspaceId: workspace.id,
       status,
       ...(q ? { subject: { contains: q, mode: "insensitive" as const } } : {}),
     },
     orderBy: { updatedAt: "desc" },
     take: 100,
-  });
+  }));
   const messages = threads.length
     ? await prisma.emailMessage.findMany({
         where: {
-          workspaceId: workspace?.id,
+          workspaceId: workspace.id,
           threadId: { in: threads.map((item) => item.id) },
         },
         orderBy: { sentAt: "asc" },

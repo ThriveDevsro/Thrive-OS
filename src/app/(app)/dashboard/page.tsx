@@ -1,18 +1,15 @@
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { Dashboard } from "@/components/dashboard";
+import { getAccessContext } from "@/lib/role-access";
+import { measureServerOperation } from "@/lib/performance";
 
 export default async function DashboardPage(){
-  const session=await auth();
-  const workspace=await prisma.workspace.findUnique({where:{slug:"thrive-dev"}});
-  const user=await prisma.user.findFirst({where:{workspaceId:workspace?.id,email:session?.user?.email??undefined}});
-  if(!workspace||!user)return <div className="empty-state">Workspace account is not configured.</div>;
-  const founder=session?.user?.role==="founder";
+  const {session,workspace,user,founder}=await getAccessContext();
   const now=new Date();const todayEnd=new Date(now);todayEnd.setHours(23,59,59,999);
   const leadWhere={workspaceId:workspace.id,...(!founder?{assigneeId:user.id}:{})};
   const opportunityWhere={workspaceId:workspace.id,...(!founder?{ownerId:user.id}:{})};
   const taskWhere={workspaceId:workspace.id,status:{in:["OPEN","IN_PROGRESS"] as ("OPEN"|"IN_PROGRESS")[]},...(!founder?{assigneeId:user.id}:{})};
-  const [leads,opportunities,tasks,meetings,activities,companyCount,openInbox]=await Promise.all([
+  const [leads,opportunities,tasks,meetings,activities,companyCount,openInbox]=await measureServerOperation("route:dashboard:data",()=>Promise.all([
     prisma.lead.findMany({where:leadWhere,include:{company:true,assignee:true},orderBy:[{score:"desc"},{createdAt:"desc"}],take:100}),
     prisma.opportunity.findMany({where:opportunityWhere,include:{stage:true,company:true},orderBy:{updatedAt:"desc"},take:100}),
     prisma.task.findMany({where:taskWhere,include:{company:true,assignee:true},orderBy:{dueAt:"asc"},take:100}),
@@ -20,7 +17,7 @@ export default async function DashboardPage(){
     prisma.activity.findMany({where:{workspaceId:workspace.id,...(!founder?{actorId:user.id}:{})},include:{company:true},orderBy:{occurredAt:"desc"},take:6}),
     prisma.company.count({where:{workspaceId:workspace.id,deletedAt:null,...(!founder?{ownerId:user.id}:{})}}),
     prisma.emailThread.count({where:{workspaceId:workspace.id,status:"OPEN"}}),
-  ]);
+  ]));
   const openDeals=opportunities.filter(item=>!item.stage.terminal);
   const pipelineValue=openDeals.reduce((sum,item)=>sum+Number(item.valueMinor)/100,0);
   const weightedValue=openDeals.reduce((sum,item)=>sum+(Number(item.valueMinor)/100)*(item.probability/100),0);

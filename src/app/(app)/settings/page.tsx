@@ -16,9 +16,9 @@ import { updateLeadSource } from "./actions";
 import { WorkspaceForm } from "./workspace-form";
 import { requireFounder } from "@/lib/role-access";
 export default async function SettingsPage() {
-  await requireFounder();
+  const { workspace: accessWorkspace } = await requireFounder();
   const workspace = await prisma.workspace.findUnique({
-    where: { slug: "thrive-dev" },
+    where: { id: accessWorkspace.id },
     include: {
       leadSources: { orderBy: { name: "asc" } },
       auditLogs: {

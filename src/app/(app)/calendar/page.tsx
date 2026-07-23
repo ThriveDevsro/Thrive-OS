@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Clock3, Download, MapPin, UsersRound, Video } from "lucide-react";
-import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { CalendarModal, OpenCalendarModal } from "./calendar-modal";
+import { getAccessContext } from "@/lib/role-access";
+import { measureServerOperation } from "@/lib/performance";
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const color: Record<string,string> = { MEETING:"blue", TASK:"violet", DEADLINE:"red", REMINDER:"amber", TIME_OFF:"green" };
@@ -10,9 +11,7 @@ const color: Record<string,string> = { MEETING:"blue", TASK:"violet", DEADLINE:"
 export default async function CalendarPage({ searchParams }: { searchParams: Promise<{ created?:string; month?:string; view?:string; date?:string }> }) {
   const { created, month, view, date } = await searchParams;
   const weekView = view === "week";
-  const session = await auth();
-  const workspace = await prisma.workspace.findUnique({ where: { slug: "thrive-dev" } });
-  const user = await prisma.user.findFirst({ where: { workspaceId: workspace?.id, email: session?.user?.email ?? undefined } });
+  const { workspace, user } = await getAccessContext();
   const parsed = month?.match(/^(\d{4})-(\d{2})$/);
   const today = new Date();
   const year = parsed ? Number(parsed[1]) : today.getFullYear();
@@ -26,10 +25,10 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate()+7);
   const rangeStart = weekView ? weekStart : gridStart;
   const rangeEnd = weekView ? weekEnd : gridEnd;
-  const [companies, meetings] = await Promise.all([
-    prisma.company.findMany({ where: { workspaceId: workspace?.id, deletedAt:null }, select:{id:true,name:true}, orderBy:{name:"asc"} }),
-    prisma.meeting.findMany({ where:{workspaceId:workspace?.id,startsAt:{gte:rangeStart,lt:rangeEnd},OR:[{visibility:{in:["TEAM","WORKSPACE"]}},{createdById:user?.id}]}, include:{company:true,createdBy:{select:{name:true}}}, orderBy:{startsAt:"asc"} }),
-  ]);
+  const [companies, meetings] = await measureServerOperation("route:calendar:data",()=>Promise.all([
+    prisma.company.findMany({ where: { workspaceId: workspace.id, deletedAt:null }, select:{id:true,name:true}, orderBy:{name:"asc"} }),
+    prisma.meeting.findMany({ where:{workspaceId:workspace.id,startsAt:{gte:rangeStart,lt:rangeEnd},OR:[{visibility:{in:["TEAM","WORKSPACE"]}},{createdById:user.id}]}, include:{company:true,createdBy:{select:{name:true}}}, orderBy:{startsAt:"asc"} }),
+  ]));
   const days: Date[]=[]; for(let day=new Date(gridStart);day<gridEnd;day.setDate(day.getDate()+1)) days.push(new Date(day));
   const previous = new Date(year,monthIndex-1,1); const next = new Date(year,monthIndex+1,1);
   const previousWeek = new Date(weekStart); previousWeek.setDate(previousWeek.getDate()-7);

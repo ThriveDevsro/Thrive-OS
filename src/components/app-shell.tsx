@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -27,8 +28,12 @@ import {
   Notifications,
   QuickAdd,
 } from "@/components/global-actions";
-import { AiCopilot } from "@/components/ai-copilot";
 import { logout } from "@/app/(app)/actions";
+
+const AiCopilot = dynamic(
+  () => import("@/components/ai-copilot").then((module) => module.AiCopilot),
+  { ssr: false },
+);
 
 const nav = [
   ["Dashboard", "/dashboard", CircleGauge],
@@ -43,6 +48,15 @@ const nav = [
   ["Team", "/team", UsersRound],
   ["Settings", "/settings", Settings],
 ] as const;
+const highPriorityRoutes = new Set([
+  "/dashboard",
+  "/lead-radar",
+  "/companies",
+  "/deals",
+  "/inbox",
+  "/tasks",
+  "/calendar",
+]);
 
 export function AppShell({
   children,
@@ -133,6 +147,7 @@ export function AppShell({
             <Link
               key={href}
               href={href}
+              prefetch={highPriorityRoutes.has(href) ? true : undefined}
               title={collapsed ? label : undefined}
               onClick={() => setOpen(false)}
               className={active(href) ? "active" : ""}
@@ -191,6 +206,7 @@ export function AppShell({
                 <Link
                   key={href}
                   href={href}
+                  prefetch={highPriorityRoutes.has(href) ? true : undefined}
                   onClick={() => setOpen(false)}
                   className={active(href) ? "active" : ""}
                 >
@@ -239,6 +255,7 @@ export function AppShell({
             <Link
               key={href}
               href={href}
+              prefetch
               className={active(href) ? "active" : ""}
             >
               <Icon size={20} />
