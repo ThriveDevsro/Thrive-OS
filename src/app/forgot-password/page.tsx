@@ -1,0 +1,4 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, KeyRound, Mail } from "lucide-react";
+export default function ForgotPasswordPage(){return <main className="recovery-page"><section><div className="login-logo symbol-login-logo"><Image src="/logo.png" alt="Thrive Dev" width={1563} height={2048} priority/></div><span className="recovery-icon"><KeyRound size={20}/></span><h1>Reset your password</h1><p>Password recovery is currently approved by the Thrive OS founder. Automatic one-time email links will become available when the company mailbox integration is connected.</p><a className="recovery-contact" href="mailto:patrik@thrivedev.co?subject=Thrive%20OS%20password%20reset"><Mail size={16}/>Request reset from admin</a><Link className="recovery-back" href="/login"><ArrowLeft size={15}/>Back to sign in</Link></section></main>}

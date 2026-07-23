@@ -1,0 +1,3 @@
+import { describe, expect, it } from "vitest";
+import { WebtrhAdapter } from "./webtrh";
+describe("Webtrh adapter safety boundary", () => { it("is review-only and disabled until approved", async () => { const adapter = new WebtrhAdapter(); expect(adapter.describe().requiresReview).toBe(true); await expect(adapter.collect()).rejects.toThrow("disabled"); }); it("normalizes public payload without inventing contact data", async () => { const lead = await new WebtrhAdapter().normalize({ externalId:"42", sourceUrl:"https://webtrh.cz/example", payload:{title:"CRM implementation",text:"Looking for a CRM",category:"CRM"} }); expect(lead).toMatchObject({ title:"CRM implementation",language:"cs",country:"CZ" }); expect(lead.businessEmail).toBeUndefined(); }); });

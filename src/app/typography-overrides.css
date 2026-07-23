@@ -1,0 +1,26 @@
+/* Operational text must be readable at normal browser zoom. */
+.task-summary small,.radar-summary span,.operational-list header span,.operational-task>div p,.operational-task time,.priority{font-size:11px!important}
+.operational-list h2,.operational-task>div strong{font-size:13px!important}
+.thread-list strong,.conversation-panel>header span,.message-stream article strong{font-size:12px!important}
+.thread-list p,.thread-list small,.thread-list time,.message-stream article small{font-size:11px!important}
+.message-stream article p,.reply-box textarea{font-size:13px!important}
+.inbox-sidebar>nav a,.inbox-search input,.conversation-panel>header button,.reply-box footer button{font-size:11px!important}
+.today-tasks-panel strong,.dashboard-meetings strong,.dashboard-activity strong,.priority-lead-list strong{font-size:12px!important}
+.today-tasks-panel small,.dashboard-meetings small,.dashboard-activity small,.priority-lead-list small,.today-tasks-panel time,.dashboard-meetings time,.pipeline-numbers span,.live-pipeline-bars span,.live-pipeline-bars b{font-size:11px!important}
+.today-tasks-panel a>b{font-size:10px!important}
+.calendar-upcoming strong,.calendar-create h2{font-size:13px!important}
+.calendar-upcoming p,.calendar-upcoming small,.calendar-create p,.calendar-modal>section>header p,.event-form-row small{font-size:11px!important}
+.event-actions a,.event-form-row>span,.event-notes>span,.event-switch>span,.apple-event-form .event-form-row input,.apple-event-form .event-form-row select,.apple-event-form .event-notes textarea,.event-advanced summary,.event-cancel{font-size:12px!important}
+.weekday-row span,.month-grid>article>time{font-size:10px!important}
+.calendar-event,.calendar-event b,.month-grid article>div>small{font-size:9px!important}
+.overview-panel h2,.timeline-panel h2,.mini-panel h2{font-size:14px!important}
+.info-item small,.timeline-event p,.timeline-event small,.mini-person small,.mini-opportunity span,.company-thread small,.company-task small,.inline-empty{font-size:11px!important}
+.info-item strong,.timeline-event strong,.mini-person strong,.mini-opportunity strong,.company-thread strong,.company-task strong{font-size:12px!important}
+.back-link,.record-tabs a,.company-actions>a,.company-actions>button{font-size:11px!important}
+.team-summary-cards span,.improved-team-list>header p,.member-identity small,.member-workload span,.member-access label span,.member-access select,.member-access button,.member-status,.role-overview header p,.role-overview article p,.role-overview article small{font-size:11px!important}
+.member-identity strong,.role-overview h2,.role-overview article strong{font-size:13px!important}
+.member-identity em{font-size:9px!important}
+.notification-menu header strong,.notification-menu>a strong,.quick-menu>a,.command-results strong{font-size:12px!important}
+.notification-menu header span,.notification-menu header button,.notification-menu>a small,.command-results small,.quick-menu>strong{font-size:10px!important}
+time{font-variant-numeric:tabular-nums}
+@media(max-width:700px){.calendar-event,.calendar-event span{font-size:8px!important}.month-grid>article>time,.weekday-row span{font-size:10px!important}.operational-task time{line-height:1.4}}

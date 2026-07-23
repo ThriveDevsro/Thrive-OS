@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: thrive_os
+      POSTGRES_USER: thrive
+      POSTGRES_PASSWORD: thrive
+    ports: ["5432:5432"]
+    volumes: ["thrive_postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U thrive -d thrive_os"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://thrive:thrive@postgres:5432/thrive_os?schema=public
+    ports: ["3000:3000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+volumes:
+  thrive_postgres:

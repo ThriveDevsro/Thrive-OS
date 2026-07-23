@@ -1,0 +1,314 @@
+.lead-ai-panel {
+  grid-column: 1/-1;
+  margin-top: 2px;
+  border-top: 1px solid #ececef;
+  background: #fafafa;
+}
+.lead-ai-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 13px;
+}
+.lead-ai-panel > header > button:first-child {
+  min-width: 0;
+  flex: 1;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  color: #52525b;
+}
+.lead-ai-panel > header > button:first-child > svg:first-child {
+  color: #7c3aed;
+}
+.lead-ai-panel > header > button:first-child span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+.lead-ai-panel > header strong {
+  font-size: 7.5px;
+}
+.lead-ai-panel > header small {
+  font-size: 6px;
+  color: #a1a1aa;
+  text-transform: capitalize;
+}
+.lead-ai-panel > header > button:first-child > svg:last-child {
+  transition: transform 0.15s;
+}
+.lead-ai-panel.open > header > button:first-child > svg:last-child {
+  transform: rotate(180deg);
+}
+.lead-ai-panel.disabled {
+  min-height: 48px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a1a1aa;
+}
+.lead-ai-panel.disabled div {
+  display: flex;
+  flex-direction: column;
+}
+.ai-analyze-button {
+  height: 30px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: #18181b !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px !important;
+  font-size: 6.5px !important;
+  font-weight: 700;
+}
+.lead-ai-content {
+  padding: 14px;
+  border-top: 1px solid #ececef;
+  background: #fff;
+}
+.ai-loading,
+.ai-empty {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  color: #71717a;
+}
+.ai-loading > svg,
+.ai-empty > svg {
+  width: 25px;
+  color: #7c3aed;
+}
+.ai-loading strong,
+.ai-empty strong {
+  font-size: 8px;
+}
+.ai-loading small,
+.ai-empty p {
+  font-size: 6.5px;
+  color: #a1a1aa;
+  margin: 0;
+}
+.ai-empty button,
+.ai-error button {
+  height: 31px;
+  border: 0;
+  border-radius: 7px;
+  background: #18181b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  font-size: 6.5px;
+  font-weight: 700;
+}
+.ai-error {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 11px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.ai-error > svg {
+  width: 18px;
+}
+.ai-error div {
+  display: flex;
+  flex-direction: column;
+}
+.ai-error strong {
+  font-size: 7.5px;
+}
+.ai-error p {
+  font-size: 6.5px;
+  margin: 3px 0 0;
+}
+.ai-analysis-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 78px;
+  gap: 15px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+.ai-analysis-top > div:first-child > span,
+.ai-next-action > span,
+.ai-tags > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #a1a1aa;
+  font-size: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ai-analysis-top p,
+.ai-next-action p {
+  font-size: 7.5px;
+  line-height: 1.55;
+  margin: 0;
+  color: #3f3f46;
+}
+.ai-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd6fe;
+  border-radius: 9px;
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+.ai-score svg {
+  width: 16px;
+}
+.ai-score strong {
+  font-size: 17px;
+  margin: 2px 0;
+}
+.ai-score small {
+  font-size: 5.5px;
+}
+.ai-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin: 11px 0;
+}
+.ai-analysis-grid > div {
+  padding: 9px;
+  border: 1px solid #eee;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+}
+.ai-analysis-grid span {
+  font-size: 5.5px;
+  color: #a1a1aa;
+}
+.ai-analysis-grid strong {
+  margin-top: 3px;
+  font-size: 7px;
+  text-transform: capitalize;
+}
+.ai-next-action {
+  padding: 10px;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+.ai-tags {
+  margin-top: 10px;
+}
+.ai-tags > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ai-tags i {
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: #f4f4f5;
+  color: #52525b;
+  font-size: 6px;
+  font-style: normal;
+}
+.ai-tags.danger i {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.lead-ai-content > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid #eee;
+}
+.lead-ai-content > footer > small {
+  font-size: 5.5px;
+  color: #a1a1aa;
+}
+.lead-ai-content > footer > div {
+  display: flex;
+  gap: 5px;
+}
+.lead-ai-content > footer button {
+  height: 30px;
+  border: 1px solid #dedee2;
+  border-radius: 6px;
+  background: #fff;
+  color: #52525b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  font-size: 6px;
+  font-weight: 700;
+}
+.lead-ai-content > footer button.approve {
+  border-color: #18181b;
+  background: #18181b;
+  color: #fff;
+}
+.lead-ai-content > footer button:disabled {
+  opacity: 0.55;
+}
+.ai-safety-note {
+  margin: 9px 0 0;
+  padding: 8px;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 6px;
+}
+@media (max-width: 700px) {
+  .lead-ai-panel {
+    margin-left: -42px;
+  }
+  .lead-ai-panel > header {
+    padding: 0 9px;
+  }
+  .lead-ai-content {
+    padding: 11px;
+  }
+  .ai-analysis-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lead-ai-content > footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .lead-ai-content > footer > div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .lead-ai-content > footer button {
+    min-height: 34px;
+    flex: 1;
+    justify-content: center;
+  }
+  .ai-analysis-top {
+    grid-template-columns: 1fr 65px;
+  }
+  .ai-analyze-button {
+    min-width: auto !important;
+  }
+}

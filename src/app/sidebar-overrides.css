@@ -1,0 +1,64 @@
+.desktop-sidebar nav a.active::after {
+  display: none !important;
+}
+
+.app-frame:not(.sidebar-collapsed) .desktop-sidebar nav a b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 99px;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.sidebar-collapsed .sidebar nav a {
+  position: relative;
+}
+
+.sidebar-collapsed .sidebar nav a b {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: block !important;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border: 2px solid #000;
+  border-radius: 99px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 8px;
+  line-height: 13px;
+  text-align: center;
+}
+
+.sidebar-collapsed .desktop-sidebar nav a.active b {
+  border-color: #1d4ed8;
+  background: #fff;
+  color: #1d4ed8;
+}
+
+.sidebar-collapsed .desktop-sidebar .profile {
+  width: 72px;
+  min-height: 64px;
+  padding: 12px 0;
+  justify-content: center;
+  gap: 0;
+}
+
+.sidebar-collapsed .desktop-sidebar .profile .avatar {
+  flex: none;
+  margin: 0;
+}
+
+.sidebar-collapsed .desktop-sidebar .profile form {
+  display: none;
+}

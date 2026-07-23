@@ -1,0 +1,231 @@
+.connection-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+.connection-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 18px;
+  color: #6b7280;
+  font-size: 11px;
+  text-decoration: none;
+}
+.connection-back svg {
+  width: 15px;
+}
+.connection-page > header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.connection-page > header > span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: #fef2f2;
+  color: #dc2626;
+}
+.connection-page > header > span svg {
+  width: 22px;
+}
+.connection-page h1 {
+  margin: 2px 0 4px;
+  font-size: 25px;
+}
+.connection-page header p:last-child {
+  margin: 0;
+  color: #737d89;
+  font-size: 11px;
+}
+.connection-card {
+  overflow: hidden;
+  border: 1px solid #e1e5ea;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 35px #11182708;
+}
+.connection-provider {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 17px;
+  border-bottom: 1px solid #edf0f3;
+}
+.gmail-mark {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 9px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 800;
+}
+.connection-provider > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.connection-provider strong {
+  font-size: 13px;
+}
+.connection-provider small {
+  color: #7b8490;
+  font-size: 10px;
+}
+.connection-provider > b {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #16815b;
+  font-size: 10px;
+}
+.connection-provider > b svg {
+  width: 14px;
+}
+.connection-status {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  padding: 8px 17px;
+}
+.connection-status > div {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f2f4;
+}
+.connection-status dt {
+  color: #8a929c;
+  font-size: 9px;
+}
+.connection-status dd {
+  margin: 3px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.connection-actions {
+  display: flex;
+  gap: 7px;
+  padding: 15px 17px;
+}
+.connection-actions form {
+  margin: 0;
+}
+.connection-actions button,
+.google-connect-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 37px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 8px;
+  background: #171a1f;
+  color: #fff;
+  font: 600 10px inherit;
+  text-decoration: none;
+}
+.connection-actions button svg {
+  width: 14px;
+}
+.connection-actions button.secondary {
+  border: 1px solid #dfe3e8;
+  background: #fff;
+  color: #4b5563;
+}
+.google-connect-button {
+  margin: 20px 17px;
+  background: #fff;
+  color: #1f2937;
+  border: 1px solid #ccd2d9;
+}
+.google-connect-button .gmail-mark {
+  width: 23px;
+  height: 23px;
+  background: transparent;
+}
+.connection-admin-required {
+  display: flex;
+  gap: 11px;
+  margin: 17px;
+  padding: 14px;
+  border-radius: 9px;
+  background: #fff8e8;
+  color: #805b14;
+}
+.connection-admin-required > svg {
+  flex: none;
+  width: 18px;
+}
+.connection-admin-required strong {
+  font-size: 10px;
+}
+.connection-admin-required p {
+  margin: 4px 0 0;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.connection-privacy {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #dcebe4;
+  border-radius: 11px;
+  background: #f5fbf7;
+}
+.connection-privacy > svg {
+  flex: none;
+  width: 18px;
+  color: #16815b;
+}
+.connection-privacy strong {
+  font-size: 10px;
+}
+.connection-privacy p {
+  margin: 4px 0 0;
+  color: #607067;
+  font-size: 9px;
+  line-height: 1.55;
+}
+.connection-notice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+.connection-notice svg {
+  width: 15px;
+}
+.connection-notice.success {
+  background: #ecfdf5;
+  color: #047857;
+}
+.connection-notice.error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+@media (max-width: 600px) {
+  .connection-page {
+    padding: 0 2px 80px;
+  }
+  .connection-status {
+    grid-template-columns: 1fr;
+  }
+  .connection-actions {
+    flex-direction: column;
+  }
+  .connection-actions form,
+  .connection-actions button {
+    width: 100%;
+  }
+}
