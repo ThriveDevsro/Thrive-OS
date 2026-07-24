@@ -2,3 +2,6 @@
 @media(max-width:1050px){.lead-inbox.batch-enabled .lead-inbox-row{grid-template-columns:20px 48px 1fr}.lead-inbox.batch-enabled .lead-owner,.lead-inbox.batch-enabled .lead-actions,.lead-inbox.batch-enabled .lead-ai-panel{grid-column:3}.lead-batch-bar form{flex-wrap:wrap}.batch-assign{margin-left:0}}
 @media(max-width:650px){.lead-batch-bar{top:70px;align-items:flex-start;flex-direction:column}.lead-batch-bar form{width:100%}.batch-assign{width:100%}.batch-assign select{min-width:0;flex:1}.lead-inbox.batch-enabled .lead-inbox-row{grid-template-columns:20px 40px minmax(0,1fr);gap:8px}.lead-batch-check{padding-top:10px}}
 .lead-owner .inline-saving{display:none}.lead-owner form:has(select:focus) .inline-saving{display:inline;color:#98a2b3;font-size:10px;align-self:center}
+.lead-inbox.batch-enabled .lead-inbox-row{grid-template-columns:20px minmax(260px,1fr) minmax(210px,.55fr) auto}
+@media(max-width:1050px){.lead-inbox.batch-enabled .lead-inbox-row{grid-template-columns:20px 1fr}.lead-inbox.batch-enabled .lead-owner,.lead-inbox.batch-enabled .lead-actions,.lead-inbox.batch-enabled .lead-ai-panel{grid-column:2}}
+@media(max-width:650px){.lead-inbox.batch-enabled .lead-inbox-row{grid-template-columns:20px minmax(0,1fr)}}

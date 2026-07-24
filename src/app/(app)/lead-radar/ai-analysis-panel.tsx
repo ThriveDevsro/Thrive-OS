@@ -6,7 +6,6 @@ import {
   BrainCircuit,
   Check,
   ChevronDown,
-  CircleGauge,
   LoaderCircle,
   RefreshCw,
   Sparkles,
@@ -156,24 +155,11 @@ export function AiAnalysisPanel({
                       <span>Summary</span>
                       <p>{analysis.summary}</p>
                     </div>
-                    <div className="ai-score">
-                      <CircleGauge />
-                      <strong>{analysis.relevanceScore ?? "—"}</strong>
-                      <small>relevance</small>
-                    </div>
                   </div>
                   <div className="ai-analysis-grid">
                     <Info label="Priority" value={analysis.priority} />
                     <Info label="Category" value={analysis.category} />
                     <Info label="Detected budget" value={budget(analysis)} />
-                    <Info
-                      label="Confidence"
-                      value={
-                        analysis.confidence === null
-                          ? null
-                          : `${Math.round(analysis.confidence * 100)}%`
-                      }
-                    />
                   </div>
                   <div className="ai-next-action">
                     <span>Suggested next action</span>

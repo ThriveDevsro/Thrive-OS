@@ -259,14 +259,13 @@ async function loadContext(input: Input): Promise<ContextRecord[]> {
         id: true,
         title: true,
         status: true,
-        score: true,
         serviceCategory: true,
         budgetMinor: true,
         budgetCurrency: true,
         country: true,
         company: { select: { name: true } },
       },
-      orderBy: [{ score: "desc" }, { createdAt: "desc" }],
+      orderBy: { createdAt: "desc" },
       take: 35,
     }),
     prisma.company.findMany({
@@ -345,7 +344,6 @@ async function loadContext(input: Input): Promise<ContextRecord[]> {
       title: item.title,
       data: {
         status: item.status,
-        score: item.score,
         category: item.serviceCategory,
         budget: item.budgetMinor ? Number(item.budgetMinor) / 100 : null,
         currency: item.budgetCurrency,

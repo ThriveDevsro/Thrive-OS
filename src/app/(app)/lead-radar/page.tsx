@@ -155,11 +155,6 @@ export default async function LeadRadarPage({
                 event.lead && (
                   <article className="lead-inbox-row" key={event.id}>
                     <LeadBatchCheckbox id={event.id} />
-                    <div
-                      className={`lead-score ${event.lead.score >= 75 ? "high" : event.lead.score >= 50 ? "medium" : ""}`}
-                    >
-                      {event.lead.score}
-                    </div>
                     <div className="lead-primary">
                       <div>
                         <span
@@ -281,7 +276,6 @@ export default async function LeadRadarPage({
                 <tr>
                   <th>Lead</th>
                   <th>Source</th>
-                  <th>Score</th>
                   <th>Status</th>
                   <th>Owner</th>
                   <th />
@@ -295,9 +289,6 @@ export default async function LeadRadarPage({
                       <small>{lead.company?.name ?? "Unlinked company"}</small>
                     </td>
                     <td>{lead.source?.name ?? "Manual"}</td>
-                    <td>
-                      <span className="score-pill">{lead.score}</span>
-                    </td>
                     <td>
                       <span className="import-status">
                         {lead.status.toLowerCase()}

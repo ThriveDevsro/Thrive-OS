@@ -32,7 +32,7 @@ export function LeadModal() {
             <header>
               <div>
                 <h2>New lead</h2>
-                <p>Paste the request. Thrive will score and organise it.</p>
+                <p>Paste the request. Thrive will organise it for review.</p>
               </div>
               <button onClick={() => setOpen(false)} aria-label="Close">
                 <X size={19} />

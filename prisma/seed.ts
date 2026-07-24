@@ -66,14 +66,6 @@ async function main() {
       data: [
         {
           workspaceId: workspace.id,
-          name: "High-score lead review",
-          trigger: { event: "lead.created" },
-          conditions: [{ field: "score", operator: "gte", value: 80 }],
-          actions: [{ type: "create_task", taskType: "REVIEW_LEAD" }],
-          active: true,
-        },
-        {
-          workspaceId: workspace.id,
           name: "Proposal follow-up",
           trigger: { event: "opportunity.stage_changed" },
           conditions: [

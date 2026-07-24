@@ -17,7 +17,7 @@ type Props = {
   role: "founder" | "salesperson";
   metrics: {
     companyCount: number;
-    urgentLeads: number;
+    attentionLeads: number;
     pipelineValue: number;
     weightedValue: number;
     openDeals: number;
@@ -29,7 +29,7 @@ type Props = {
   leads: {
     id: string;
     title: string;
-    score: number;
+    status: string;
     company: string;
     owner: string;
   }[];
@@ -102,10 +102,10 @@ export function Dashboard({
         <Metric
           icon={<Radar />}
           label={founder ? "Leads to review" : "My priority leads"}
-          value={metrics.urgentLeads}
-          detail="Score 70+ requiring action"
+          value={metrics.attentionLeads}
+          detail="New, unreviewed or unassigned"
           href="/lead-radar"
-          tone={metrics.urgentLeads ? "amber" : "green"}
+          tone={metrics.attentionLeads ? "amber" : "green"}
         />
         <Metric
           icon={<BriefcaseBusiness />}
@@ -138,8 +138,8 @@ export function Dashboard({
             title="Priority leads"
             subtitle={
               founder
-                ? "Highest-score leads across the company"
-                : "Your highest-score assigned leads"
+                ? "Newest leads waiting for a decision"
+                : "Your newest leads waiting for action"
             }
             href="/lead-radar"
           />
@@ -147,13 +147,11 @@ export function Dashboard({
             <div className="priority-lead-list">
               {leads.map((item) => (
                 <Link href={`/lead-radar?lead=${item.id}`} key={item.id}>
-                  <span className={item.score >= 80 ? "hot" : "warm"}>
-                    {item.score}
-                  </span>
+                  <span><Radar /></span>
                   <div>
                     <strong>{item.title}</strong>
                     <small>
-                      {item.company} · {item.owner}
+                      {item.status.toLowerCase()} · {item.company} · {item.owner}
                     </small>
                   </div>
                   <ArrowRight />

@@ -1,6 +1,5 @@
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { scoreLead } from "@/lib/leads/scoring";
 import {
   buildDedupeKey,
   moneyToMinor,
@@ -218,14 +217,6 @@ export async function importLead(
         input.lead.budgetMax ?? input.lead.budgetMin,
       );
       const currency = input.lead.currency ?? workspace.currency;
-      const scoring = scoreLead({
-        text: `${input.lead.title} ${input.lead.description ?? ""}`,
-        email,
-        budgetMinor,
-        publishedAt: input.lead.publishedAt
-          ? new Date(input.lead.publishedAt)
-          : undefined,
-      });
       const lead = await tx.lead.create({
         data: {
           workspaceId: workspace.id,
@@ -242,8 +233,8 @@ export async function importLead(
           publishedAt: input.lead.publishedAt
             ? new Date(input.lead.publishedAt)
             : undefined,
-          score: scoring.score,
-          scoreReasons: json(scoring.reasons),
+          score: 0,
+          scoreReasons: [],
           status: "REVIEW",
         },
       });
@@ -287,7 +278,6 @@ export async function importLead(
           select: {
             id: true,
             title: true,
-            score: true,
             companyId: true,
             contactId: true,
             assigneeId: true,
@@ -308,7 +298,6 @@ export async function importLead(
             leadId: lead.id,
             ownerId: lead.assigneeId ?? owner?.id,
             title: lead.title,
-            score: lead.score,
             companyId: lead.companyId,
             contactId: lead.contactId,
           },
