@@ -3,11 +3,9 @@ import Link from "next/link";
 import {
   BriefcaseBusiness,
   ChevronLeft,
-  CheckSquare,
   Globe2,
   Mail,
   MapPin,
-  Plus,
   UserRound,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -37,11 +35,6 @@ export default async function CompanyPage({
         orderBy: { updatedAt: "desc" },
       },
       activities: { take: 12, orderBy: { occurredAt: "desc" } },
-      tasks: {
-        where: { status: { in: ["OPEN", "IN_PROGRESS"] } },
-        take: 8,
-        orderBy: { dueAt: "asc" },
-      },
       emailThreads: {
         take: 8,
         include: { messages: { take: 1, orderBy: { sentAt: "desc" } } },
@@ -79,9 +72,6 @@ export default async function CompanyPage({
             <Mail size={15} /> Email
           </Link>
           <CompanyActivityModal companyId={company.id} teammates={teammates} />
-          <Link className="primary-link" href={`/tasks?new=1&company=${company.id}`}>
-            <Plus size={15} /> New task
-          </Link>
         </div>
       </header>
       <div className="detail-grid">
@@ -186,21 +176,6 @@ export default async function CompanyPage({
             ) : (
               <div className="inline-empty">No opportunities yet.</div>
             )}
-          </article>
-          <article className="panel mini-panel" id="tasks">
-            <header>
-              <h2>Open tasks</h2>
-              <Link className="mini-add-action" href={`/tasks?new=1&company=${company.id}`}><Plus size={13}/> New task</Link>
-            </header>
-            {company.tasks.length ? company.tasks.map((task) => (
-              <div className="company-task" key={task.id}>
-                <CheckSquare size={14} />
-                <div>
-                  <strong>{task.title}</strong>
-                  <small>{task.dueAt.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</small>
-                </div>
-              </div>
-            )) : <div className="inline-empty">No open tasks.</div>}
           </article>
         </aside>
       </div>

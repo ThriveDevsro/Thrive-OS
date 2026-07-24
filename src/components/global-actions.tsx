@@ -213,10 +213,6 @@ export function QuickAdd() {
             <CalendarPlus />
             Event
           </Link>
-          <Link href="/tasks?new=1" onClick={() => setOpen(false)}>
-            <Plus />
-            Task
-          </Link>
         </div>
       )}
     </div>
@@ -287,7 +283,7 @@ function notificationHref(type: string) {
   if (type === "MENTION") return "/companies";
   if (type.includes("LEAD")) return "/lead-radar";
   if (type.includes("EMAIL")) return "/inbox";
-  return "/tasks";
+  return "/dashboard";
 }
 
 function formatNotificationDate(value: string) {

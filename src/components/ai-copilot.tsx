@@ -260,7 +260,7 @@ export function AiCopilot({ enabled }: { enabled: boolean }) {
                   <Sparkles />
                   <h2>Čo chceš dnes vyriešiť?</h2>
                   <p>
-                    Pýtaj sa na leady, firmy, pipeline, tasky alebo inbox.
+                    Pýtaj sa na leady, firmy, pipeline alebo inbox.
                     Thrive AI pripraví návrhy, nič nevykoná bez potvrdenia.
                   </p>
                   <div>
@@ -469,8 +469,7 @@ function FormattedAnswer({ content }: { content: string }) {
 function label(tool: string) {
   if (tool === "DRAFT_EMAIL") return "E-mail draft";
   if (tool === "CREATE_DEAL") return "New deal";
-  if (tool === "SCHEDULE_FOLLOW_UP") return "Follow-up";
-  return "New task";
+  return "Suggested action";
 }
 
 function pageContext(pathname: string, thread: string | null) {

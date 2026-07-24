@@ -19,7 +19,7 @@ export function MeetingForm({ companies, defaultStart, defaultEnd, onCancel }: {
     <details className="event-advanced">
       <summary>More options <ChevronDown size={14}/></summary>
       <div className="event-advanced-fields">
-        <div className="event-form-row"><span>Type</span><select name="eventType" defaultValue="MEETING"><option value="MEETING">Meeting</option><option value="TASK">Task</option><option value="DEADLINE">Deadline</option><option value="REMINDER">Reminder</option><option value="TIME_OFF">Time off</option></select></div>
+        <div className="event-form-row"><span>Type</span><select name="eventType" defaultValue="MEETING"><option value="MEETING">Meeting</option><option value="DEADLINE">Deadline</option><option value="REMINDER">Reminder</option><option value="TIME_OFF">Time off</option></select></div>
         <label className="event-switch"><span>All-day event</span><input name="allDay" type="checkbox"/></label>
         <div className="event-form-row"><span>Company</span><select name="companyId"><option value="">None — internal event</option>{companies.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
         <div className="event-form-row"><span>Location</span><input name="location" placeholder="Add location"/></div>

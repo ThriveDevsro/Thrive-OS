@@ -5,7 +5,7 @@ import { getAccessContext } from "@/lib/role-access";
 export default async function AnalyticsPage() {
   const { workspace, user, founder } = await getAccessContext();
   const id = workspace.id;
-  const [leads, opportunities, tasks, activities] = await Promise.all([
+  const [leads, opportunities, activities] = await Promise.all([
     prisma.lead.findMany({
       where: {
         workspaceId: id,
@@ -19,13 +19,6 @@ export default async function AnalyticsPage() {
         ...(!founder ? { ownerId: user.id } : {}),
       },
       include: { stage: true },
-    }),
-    prisma.task.findMany({
-      where: {
-        workspaceId: id,
-        ...(!founder ? { assigneeId: user.id } : {}),
-      },
-      select: { status: true, dueAt: true },
     }),
     prisma.activity.count({
       where: {
@@ -52,13 +45,6 @@ export default async function AnalyticsPage() {
     ],
     ["Deals won", won.length, CheckCircle2],
     ["Activities", activities, Mail],
-    [
-      "Overdue tasks",
-      tasks.filter(
-        (task) => task.status !== "COMPLETED" && task.dueAt < new Date(),
-      ).length,
-      TrendingUp,
-    ],
   ] as const;
   const services = Object.entries(
     Object.groupBy(leads, (lead) => lead.serviceCategory ?? "Other"),
@@ -77,7 +63,7 @@ export default async function AnalyticsPage() {
           <p>
             {founder
               ? "Live operational metrics across Thrive Dev"
-              : "Your assigned leads, deals, activity and tasks"}
+              : "Your assigned leads, deals and activity"}
           </p>
         </div>
       </div>

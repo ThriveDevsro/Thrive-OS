@@ -7,9 +7,7 @@ import { can } from "@/lib/permissions";
 const previewSchema = z.object({
   type: z.enum([
     "DRAFT_EMAIL",
-    "CREATE_TASK",
     "CREATE_DEAL",
-    "SCHEDULE_FOLLOW_UP",
   ]),
   title: z.string().min(1).max(180),
   description: z.string().max(3000),
@@ -55,31 +53,7 @@ export async function POST(
     const result = await prisma.$transaction(async (tx) => {
       let resultType = "DRAFT";
       let resultId: string | null = null;
-      if (
-        preview.type === "CREATE_TASK" ||
-        preview.type === "SCHEDULE_FOLLOW_UP"
-      ) {
-        const dueAt = new Date();
-        dueAt.setUTCDate(dueAt.getUTCDate() + (preview.dueInDays ?? 1));
-        const task = await tx.task.create({
-          data: {
-            workspaceId: access.workspaceId,
-            title: preview.title,
-            notes: preview.description,
-            dueAt,
-            priority: "NORMAL",
-            status: "OPEN",
-            type:
-              preview.type === "SCHEDULE_FOLLOW_UP" ? "FOLLOW_UP" : "GENERAL",
-            companyId: target.companyId,
-            opportunityId: target.opportunityId,
-            assigneeId: access.userId,
-            createdById: access.userId,
-          },
-        });
-        resultType = "Task";
-        resultId = task.id;
-      } else if (preview.type === "CREATE_DEAL") {
+      if (preview.type === "CREATE_DEAL") {
         if (!target.companyId) throw new AiError("AI_LEAD_NOT_FOUND", 422);
         const stage = await tx.opportunityStage.findFirst({
           where: {

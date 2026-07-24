@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import "./globals.css";
 import "./mobile.css";
-import "./tasks.css";
 import "./interactions.css";
 import "./sidebar.css";
 import "./sidebar-overrides.css";

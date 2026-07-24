@@ -1,7 +1,6 @@
 import {
   BriefcaseBusiness,
   CheckCircle2,
-  ListTodo,
   Radar,
   ShieldCheck,
   UserRoundCheck,
@@ -22,7 +21,6 @@ export default async function TeamPage() {
         _count: {
           select: {
             assignedLeads: true,
-            assignedTasks: true,
             ownedOpportunities: true,
           },
         },
@@ -115,10 +113,6 @@ export default async function TeamPage() {
                 <span>
                   <BriefcaseBusiness />
                   {user._count.ownedOpportunities} deals
-                </span>
-                <span>
-                  <ListTodo />
-                  {user._count.assignedTasks} tasks
                 </span>
               </div>
               <form action={updateTeamMember} className="member-access">

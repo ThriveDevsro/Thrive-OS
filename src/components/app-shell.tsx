@@ -14,7 +14,6 @@ import {
   ChevronRight,
   CircleGauge,
   Inbox,
-  ListTodo,
   LogOut,
   Menu,
   Radar,
@@ -41,7 +40,6 @@ const nav = [
   ["Companies", "/companies", Building2],
   ["Deals", "/deals", BriefcaseBusiness],
   ["Inbox", "/inbox", Inbox],
-  ["Tasks", "/tasks", ListTodo],
   ["Calendar", "/calendar", CalendarDays],
   ["Analytics", "/analytics", BarChart3],
   ["Automations", "/automations", Workflow],
@@ -54,7 +52,6 @@ const highPriorityRoutes = new Set([
   "/companies",
   "/deals",
   "/inbox",
-  "/tasks",
   "/calendar",
 ]);
 
@@ -93,7 +90,7 @@ export function AppShell({
           ([label]) => !["Automations", "Team", "Settings"].includes(label),
         );
   const mobilePrimary = visibleNav.filter(([label]) =>
-    ["Dashboard", "Lead Radar", "Inbox", "Tasks"].includes(label),
+    ["Dashboard", "Lead Radar", "Inbox"].includes(label),
   );
   const mobilePrimaryHrefs = new Set(mobilePrimary.map(([, href]) => href));
   const moreActive = visibleNav.some(

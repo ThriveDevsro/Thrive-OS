@@ -2,25 +2,25 @@ import { describe, expect, it } from "vitest";
 import { copilotOutputSchema } from "./schema";
 
 const valid = {
-  answer: "Prioritize the highest-scoring lead.",
+  answer: "Review the newest relevant lead.",
   searchResults: [
     {
       entityType: "lead",
       entityId: "11111111-1111-4111-8111-111111111111",
       title: "CRM project",
-      reason: "High score and available budget.",
+      reason: "Recent request with an available budget.",
     },
   ],
   actions: [
     {
-      type: "CREATE_TASK",
-      title: "Review CRM brief",
-      description: "Check requirements before outreach.",
+      type: "CREATE_DEAL",
+      title: "CRM implementation",
+      description: "Create a deal after reviewing requirements.",
       entityType: "lead",
       entityId: "11111111-1111-4111-8111-111111111111",
-      dueInDays: 1,
-      amount: null,
-      currency: null,
+      dueInDays: null,
+      amount: 2000,
+      currency: "EUR",
     },
   ],
 };

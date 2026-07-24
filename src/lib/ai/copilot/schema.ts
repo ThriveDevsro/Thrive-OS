@@ -6,7 +6,7 @@ export const copilotOutputSchema = z
     searchResults: z
       .array(
         z.object({
-          entityType: z.enum(["lead", "company", "deal", "task", "thread"]),
+          entityType: z.enum(["lead", "company", "deal", "thread"]),
           entityId: z.string().uuid(),
           title: z.string().trim().min(1).max(180),
           reason: z.string().trim().min(1).max(240),
@@ -18,9 +18,7 @@ export const copilotOutputSchema = z
         z.object({
           type: z.enum([
             "DRAFT_EMAIL",
-            "CREATE_TASK",
             "CREATE_DEAL",
-            "SCHEDULE_FOLLOW_UP",
           ]),
           title: z.string().trim().min(1).max(180),
           description: z.string().trim().max(3000),
@@ -56,7 +54,7 @@ export const copilotJsonSchema = {
         properties: {
           entityType: {
             type: "string",
-            enum: ["lead", "company", "deal", "task", "thread"],
+            enum: ["lead", "company", "deal", "thread"],
           },
           entityId: { type: "string" },
           title: { type: "string", maxLength: 180 },
@@ -85,9 +83,7 @@ export const copilotJsonSchema = {
             type: "string",
             enum: [
               "DRAFT_EMAIL",
-              "CREATE_TASK",
               "CREATE_DEAL",
-              "SCHEDULE_FOLLOW_UP",
             ],
           },
           title: { type: "string", maxLength: 180 },

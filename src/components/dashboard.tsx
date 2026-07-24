@@ -6,7 +6,6 @@ import {
   Building2,
   CalendarClock,
   CheckCircle2,
-  Clock3,
   Inbox,
   Radar,
   UsersRound,
@@ -21,8 +20,7 @@ type Props = {
     pipelineValue: number;
     weightedValue: number;
     openDeals: number;
-    overdue: number;
-    dueToday: number;
+    upcomingEvents: number;
     openInbox: number;
   };
   pipeline: { stage: string; count: number; value: number }[];
@@ -31,14 +29,6 @@ type Props = {
     title: string;
     status: string;
     company: string;
-    owner: string;
-  }[];
-  tasks: {
-    id: string;
-    title: string;
-    company: string;
-    dueAt: Date;
-    priority: string;
     owner: string;
   }[];
   meetings: { id: string; title: string; startsAt: Date; company: string }[];
@@ -56,7 +46,6 @@ export function Dashboard({
   metrics,
   pipeline,
   leads,
-  tasks,
   meetings,
   activities,
 }: Props) {
@@ -116,12 +105,12 @@ export function Dashboard({
           tone="blue"
         />
         <Metric
-          icon={<Clock3 />}
-          label="Tasks needing attention"
-          value={metrics.overdue + metrics.dueToday}
-          detail={`${metrics.overdue} overdue · ${metrics.dueToday} due today`}
-          href="/tasks"
-          tone={metrics.overdue ? "red" : "green"}
+          icon={<CalendarClock />}
+          label="Upcoming events"
+          value={metrics.upcomingEvents}
+          detail="Meetings and company events"
+          href="/calendar"
+          tone="green"
         />
         <Metric
           icon={<Inbox />}
@@ -205,44 +194,6 @@ export function Dashboard({
             </div>
           ) : (
             <Empty icon={<BarChart3 />} text="No open deals yet." />
-          )}
-        </article>
-        <article className="panel today-tasks-panel">
-          <DashboardHead
-            title="Next actions"
-            subtitle={founder ? "Most urgent team tasks" : "Your next tasks"}
-            href="/tasks"
-          />
-          {tasks.length ? (
-            <div>
-              {tasks.map((item) => (
-                <Link href="/tasks" key={item.id}>
-                  <span className={item.dueAt < new Date() ? "overdue" : ""}>
-                    <Clock3 />
-                  </span>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <small>
-                      {item.company}
-                      {founder ? ` · ${item.owner}` : ""}
-                    </small>
-                  </div>
-                  <time>
-                    {item.dueAt.toLocaleString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </time>
-                  <b className={`priority-${item.priority.toLowerCase()}`}>
-                    {item.priority.toLowerCase()}
-                  </b>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <Empty icon={<CheckCircle2 />} text="No open tasks." />
           )}
         </article>
         <article className="panel dashboard-meetings">
