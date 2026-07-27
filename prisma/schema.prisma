@@ -216,6 +216,8 @@ model Company {
   legalName          String?
   domain             String?
   website            String?
+  email              String?
+  phone              String?
   registrationNumber String?
   country            String?       @db.VarChar(2)
   city               String?

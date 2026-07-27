@@ -2,7 +2,12 @@ import Link from "next/link";
 import { Building2, ChevronLeft } from "lucide-react";
 import { CompanyForm } from "../company-form";
 
-export default function NewCompanyPage() {
+export default async function NewCompanyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ email?: string }>;
+}) {
+  const { email = "" } = await searchParams;
   return (
     <div className="company-create">
       <Link href="/companies" className="back-link">
@@ -16,7 +21,7 @@ export default function NewCompanyPage() {
             <p>Start with the essentials. You can add more details later.</p>
           </div>
         </header>
-        <CompanyForm />
+        <CompanyForm defaultEmail={email} />
       </section>
     </div>
   );

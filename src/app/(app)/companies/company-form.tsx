@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createCompany, type CompanyFormState } from "./actions";
 
 const initial: CompanyFormState = {};
-export function CompanyForm() {
+export function CompanyForm({ defaultEmail = "" }: { defaultEmail?: string }) {
   const [state, action, pending] = useActionState(createCompany, initial);
   const field = (name: string) => state.errors?.[name]?.[0];
   return (
@@ -37,7 +37,7 @@ export function CompanyForm() {
         </summary>
         <div className="form-grid">
           <label>
-            <span>Domain</span>
+            <span>Website / domain</span>
             <input
               name="domain"
               placeholder="company.sk"
@@ -46,14 +46,25 @@ export function CompanyForm() {
             {field("domain") && <small>{field("domain")}</small>}
           </label>
           <label>
-            <span>Website</span>
+            <span>Company email</span>
             <input
-              name="website"
-              type="url"
-              placeholder="https://company.sk"
-              aria-invalid={Boolean(field("website"))}
+              name="email"
+              type="email"
+              defaultValue={defaultEmail}
+              placeholder="info@company.sk"
+              aria-invalid={Boolean(field("email"))}
             />
-            {field("website") && <small>{field("website")}</small>}
+            {field("email") && <small>{field("email")}</small>}
+          </label>
+          <label>
+            <span>Phone</span>
+            <input
+              name="phone"
+              type="tel"
+              placeholder="+421 900 000 000"
+              aria-invalid={Boolean(field("phone"))}
+            />
+            {field("phone") && <small>{field("phone")}</small>}
           </label>
           <label>
             <span>City</span>

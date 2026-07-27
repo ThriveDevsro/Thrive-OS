@@ -5,7 +5,7 @@ import {
   ChevronLeft,
   Globe2,
   Mail,
-  MapPin,
+  Phone,
   UserRound,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -81,9 +81,14 @@ export default async function CompanyPage({
                 value={company.domain ?? "Not available"}
               />
               <Info
-                icon={<MapPin />}
-                label="Location"
-                value={`${company.city ?? "—"}, ${company.country ?? "—"}`}
+                icon={<Mail />}
+                label="Email"
+                value={company.email ?? "Not available"}
+              />
+              <Info
+                icon={<Phone />}
+                label="Phone"
+                value={company.phone ?? "Not available"}
               />
               <Info
                 icon={<UserRound />}
