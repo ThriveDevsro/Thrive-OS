@@ -62,9 +62,11 @@
   width: 35px;
   height: 35px;
   border-radius: 9px;
-  background: #fef2f2;
-  color: #dc2626;
-  font-weight: 800;
+  background: #fff;
+  border: 1px solid #edf0f3;
+}
+.gmail-mark img {
+  display: block;
 }
 .connection-provider > div {
   display: flex;
@@ -145,10 +147,9 @@
   color: #1f2937;
   border: 1px solid #ccd2d9;
 }
-.google-connect-button .gmail-mark {
-  width: 23px;
-  height: 23px;
-  background: transparent;
+.google-connect-button img {
+  display: block;
+  flex: none;
 }
 .connection-admin-required {
   display: flex;

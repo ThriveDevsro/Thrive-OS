@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   CheckCircle2,
@@ -61,7 +62,9 @@ export default async function ConnectionsPage({
       )}
       <section className="connection-card">
         <div className="connection-provider">
-          <span className="gmail-mark">M</span>
+          <span className="gmail-mark">
+            <Image src="/gmail-logo.svg" alt="Gmail" width={30} height={30} />
+          </span>
           <div>
             <strong>Google Gmail</strong>
             <small>
@@ -121,7 +124,7 @@ export default async function ConnectionsPage({
             className="google-connect-button"
             href="/api/integrations/google/connect"
           >
-            <span className="gmail-mark">G</span>
+            <Image src="/google-logo.svg" alt="" width={18} height={18} />
             Continue with Google
           </a>
         ) : (
