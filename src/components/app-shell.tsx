@@ -214,7 +214,6 @@ export function AppShell({
                   height={197}
                   priority
                 />
-                <small>Workspace navigation</small>
               </Link>
               <button
                 type="button"
@@ -224,7 +223,6 @@ export function AppShell({
                 <X size={23} />
               </button>
             </header>
-            <p className="mobile-nav-label">Workspace</p>
             <nav>
               {visibleNav.map(([label, href, Icon]) => (
                 <Link

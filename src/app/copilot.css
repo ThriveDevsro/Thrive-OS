@@ -514,15 +514,18 @@
   min-width: 0;
 }
 .copilot-new-chat {
-  width: auto !important;
+  width: 34px !important;
   height: 34px;
-  gap: 6px;
-  padding: 0 10px;
-  border: 1px solid #e0e4ea !important;
+  padding: 0;
+  display: grid !important;
+  place-items: center;
+  border: 0 !important;
   border-radius: 8px;
-  background: #fff !important;
-  color: #344054 !important;
-  font-size: 11px;
+  background: transparent !important;
+  color: #667085 !important;
+}
+.copilot-new-chat span {
+  display: none;
 }
 .copilot-new-chat svg {
   width: 15px;
@@ -535,6 +538,7 @@
 .copilot-close:hover,
 .copilot-new-chat:hover {
   background: #f4f5f7 !important;
+  color: #6957d6 !important;
 }
 .copilot-stream {
   padding: 24px 22px;

@@ -238,7 +238,13 @@ export function AiCopilot({ enabled }: { enabled: boolean }) {
                 <strong>Thrive AI</strong>
                 <small>Ask, analyze and prepare CRM work</small>
               </div>
-              <button className="copilot-new-chat" type="button" onClick={newChat}>
+              <button
+                className="copilot-new-chat"
+                type="button"
+                onClick={newChat}
+                aria-label="Start a new chat"
+                title="New chat"
+              >
                 <MessageSquarePlus /> <span>New chat</span>
               </button>
               <button className="copilot-close" onClick={() => setOpen(false)} aria-label="Close">
