@@ -270,7 +270,7 @@ export function Notifications() {
 function notificationHref(type: string) {
   if (type === "MENTION") return "/companies";
   if (type.includes("LEAD")) return "/lead-radar";
-  if (type.includes("EMAIL")) return "/inbox";
+  if (type.includes("EMAIL")) return "/companies";
   return "/dashboard";
 }
 

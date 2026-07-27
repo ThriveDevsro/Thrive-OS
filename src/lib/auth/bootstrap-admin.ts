@@ -85,7 +85,7 @@ export async function ensureInitialAdmin(input: {
         key: "salesperson",
         name: "Salesperson",
         description:
-          "Access to assigned leads, owned companies and deals, personal tasks, shared inbox and calendar.",
+          "Access to assigned leads, owned companies and deals, personal tasks and calendar.",
         system: true,
       },
     });
@@ -96,7 +96,7 @@ export async function ensureInitialAdmin(input: {
       update: {
         name: "Programmer",
         description:
-          "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+          "Technical access to assigned CRM work, calendar, AI and automations. No team or security administration.",
         system: true,
       },
       create: {
@@ -104,7 +104,7 @@ export async function ensureInitialAdmin(input: {
         key: "programmer",
         name: "Programmer",
         description:
-          "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+          "Technical access to assigned CRM work, calendar, AI and automations. No team or security administration.",
         system: true,
       },
     });

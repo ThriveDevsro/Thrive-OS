@@ -1,8 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
   CheckCircle2,
-  ChevronLeft,
   LockKeyhole,
   Mail,
   RefreshCw,
@@ -34,9 +32,6 @@ export default async function ConnectionsPage({
   );
   return (
     <div className="connection-page">
-      <Link href="/inbox" className="connection-back">
-        <ChevronLeft /> Back to Inbox
-      </Link>
       <header>
         <span>
           <Mail />

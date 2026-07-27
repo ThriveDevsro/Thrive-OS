@@ -12,7 +12,6 @@ import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
-  Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -40,7 +39,6 @@ const nav = [
   ["Lead Radar", "/lead-radar", Radar],
   ["Companies", "/companies", Building2],
   ["Deals", "/deals", BriefcaseBusiness],
-  ["Inbox", "/inbox", Inbox],
   ["Calendar", "/calendar", CalendarDays],
   ["Analytics", "/analytics", BarChart3],
   ["Brand", "/brand", Palette],
@@ -53,7 +51,6 @@ const highPriorityRoutes = new Set([
   "/lead-radar",
   "/companies",
   "/deals",
-  "/inbox",
   "/calendar",
 ]);
 
@@ -95,7 +92,7 @@ export function AppShell({
     ([label]) => !hiddenNavigation.includes(label),
   );
   const mobilePrimary = visibleNav.filter(([label]) =>
-    ["Dashboard", "Lead Radar", "Inbox", "Calendar"].includes(label),
+    ["Dashboard", "Lead Radar", "Deals", "Calendar"].includes(label),
   );
   const mobilePrimaryHrefs = new Set(mobilePrimary.map(([, href]) => href));
   const moreActive = visibleNav.some(

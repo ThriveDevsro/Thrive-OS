@@ -4,7 +4,6 @@
 .thread-list strong,.conversation-panel>header span,.message-stream article strong{font-size:12px!important}
 .thread-list p,.thread-list small,.thread-list time,.message-stream article small{font-size:11px!important}
 .message-stream article p,.reply-box textarea{font-size:13px!important}
-.inbox-sidebar>nav a,.inbox-search input,.conversation-panel>header button,.reply-box footer button{font-size:11px!important}
 .today-tasks-panel strong,.dashboard-meetings strong,.dashboard-activity strong,.priority-lead-list strong{font-size:12px!important}
 .today-tasks-panel small,.dashboard-meetings small,.dashboard-activity small,.priority-lead-list small,.today-tasks-panel time,.dashboard-meetings time,.pipeline-numbers span,.live-pipeline-bars span,.live-pipeline-bars b{font-size:11px!important}
 .today-tasks-panel a>b{font-size:10px!important}

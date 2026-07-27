@@ -243,7 +243,7 @@ function sanitizeOutput(output: CopilotOutput, allowed: Set<string>) {
 function hrefFor(type: ContextRecord["entityType"], id: string) {
   if (type === "company") return `/companies/${id}`;
   if (type === "deal") return `/deals?q=${id}`;
-  if (type === "thread") return `/inbox?thread=${id}`;
+  if (type === "thread") return "/companies";
   return `/lead-radar?lead=${id}`;
 }
 

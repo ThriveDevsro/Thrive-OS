@@ -266,7 +266,7 @@ export function AiCopilot({ enabled }: { enabled: boolean }) {
                   <Sparkles />
                   <h2>Čo chceš dnes vyriešiť?</h2>
                   <p>
-                    Pýtaj sa na leady, firmy, pipeline alebo inbox.
+                    Pýtaj sa na leady, firmy, pipeline alebo komunikáciu.
                     Thrive AI pripraví návrhy, nič nevykoná bez potvrdenia.
                   </p>
                   <div>
@@ -330,15 +330,9 @@ export function AiCopilot({ enabled }: { enabled: boolean }) {
                               <b>{action.preview.title ?? "AI suggestion"}</b>
                               <p>{action.preview.description}</p>
                               {action.status === "CONFIRMED" ? (
-                                action.tool === "DRAFT_EMAIL" ? (
-                                  <Link href={`/inbox?draft=${action.id}`}>
-                                    <Check /> Otvoriť draft v Inboxe
-                                  </Link>
-                                ) : (
-                                  <em>
-                                    <Check /> Potvrdené
-                                  </em>
-                                )
+                                <em>
+                                  <Check /> Potvrdené
+                                </em>
                               ) : (
                                 <button
                                   type="button"

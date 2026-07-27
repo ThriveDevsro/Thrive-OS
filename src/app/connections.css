@@ -3,18 +3,6 @@
   margin: 0 auto;
   padding-bottom: 50px;
 }
-.connection-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 18px;
-  color: #6b7280;
-  font-size: 11px;
-  text-decoration: none;
-}
-.connection-back svg {
-  width: 15px;
-}
 .connection-page > header {
   display: flex;
   align-items: center;

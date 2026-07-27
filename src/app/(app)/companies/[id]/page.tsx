@@ -67,9 +67,6 @@ export default async function CompanyPage({
           </p>
         </div>
         <div className="company-actions">
-          <Link href={`/inbox?company=${company.id}`}>
-            <Mail size={15} /> Email
-          </Link>
           <CompanyActivityModal companyId={company.id} teammates={teammates} />
         </div>
       </header>
@@ -121,16 +118,15 @@ export default async function CompanyPage({
           <article className="panel mini-panel company-email-panel" id="emails">
             <header>
               <h2>Email conversations</h2>
-              <Link href={`/inbox?company=${company.id}`}>Open inbox</Link>
             </header>
             {company.emailThreads.length ? company.emailThreads.map((thread) => (
-              <Link className="company-thread" href={`/inbox?thread=${thread.id}`} key={thread.id}>
+              <div className="company-thread" key={thread.id}>
                 <span><Mail size={14} /></span>
                 <div>
                   <strong>{thread.subject}</strong>
                   <small>{thread.messages[0]?.sender ?? "Email conversation"} · {thread.lastMessageAt?.toLocaleString("en-GB") ?? "No messages"}</small>
                 </div>
-              </Link>
+              </div>
             )) : <div className="inline-empty">No synced email conversations for this company.</div>}
           </article>
         </section>

@@ -6,7 +6,6 @@ import {
   Building2,
   CalendarClock,
   CheckCircle2,
-  Inbox,
   Radar,
 } from "lucide-react";
 
@@ -20,7 +19,6 @@ type Props = {
     weightedValue: number;
     openDeals: number;
     upcomingEvents: number;
-    openInbox: number;
   };
   pipeline: { stage: string; count: number; value: number }[];
   leads: {
@@ -87,11 +85,11 @@ export function Dashboard({
           tone="green"
         />
         <Metric
-          icon={<Inbox />}
-          label="Open conversations"
-          value={metrics.openInbox}
-          detail={`${metrics.companyCount} ${founder ? "companies" : "owned companies"}`}
-          href="/inbox"
+          icon={<Building2 />}
+          label={founder ? "Companies" : "My companies"}
+          value={metrics.companyCount}
+          detail="Active CRM company records"
+          href="/companies"
           tone="violet"
         />
       </section>

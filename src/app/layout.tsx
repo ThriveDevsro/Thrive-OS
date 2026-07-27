@@ -17,7 +17,6 @@ import "./team.css";
 import "./ai.css";
 import "./copilot.css";
 import "./connections.css";
-import "./inbox.css";
 import "./dashboard-role.css";
 import "./invite.css";
 import "./readability.css";
