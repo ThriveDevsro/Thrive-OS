@@ -4,6 +4,7 @@ import {
   BarChart3,
   BriefcaseBusiness,
   Building2,
+  CalendarDays,
   CalendarClock,
   CheckCircle2,
   Inbox,
@@ -54,16 +55,14 @@ export function Dashboard({
     <>
       <div className="page-heading role-dashboard-heading">
         <div>
-          <h1>Dashboard</h1>
-          <p>
-            {founder
-              ? `Good ${dayPart()}, ${firstName}. Here is what needs attention across Thrive Dev today.`
-              : `Good ${dayPart()}, ${firstName}. Here are your leads, deals and next actions.`}
-          </p>
+          <h1>Good {dayPart()}, {firstName}.</h1>
         </div>
         <time className="dashboard-current-date" dateTime={dateKey()}>
-          <span>Today</span>
-          <strong>{currentDate()}</strong>
+          <CalendarDays />
+          <span>
+            <small>Today</small>
+            <strong>{currentDate()}</strong>
+          </span>
         </time>
       </div>
       <section className="dashboard-priority-grid">
