@@ -9,6 +9,7 @@
   let connected = false;
   let crmData;
   let crmLoading = false;
+  let connectionError = "";
   let refreshTimer;
 
   const launcher = document.createElement("button");
@@ -86,6 +87,7 @@
                  <span>↗</span>
                  <h2>Connect Thrive OS</h2>
                  <p>Sign in securely to show CRM context for Gmail contacts.</p>
+                 ${connectionError ? `<p class="thrive-gmail-error">${escapeHtml(connectionError)}</p>` : ""}
                  <button class="thrive-gmail-primary" type="button" data-connect>Connect Thrive OS</button>
                </div>`
             : !contactEmail
@@ -114,15 +116,18 @@
   }
 
   async function initializePanel() {
-    const status = await chrome.runtime.sendMessage({ type: "AUTH_STATUS" });
+    const status = await sendMessage({ type: "AUTH_STATUS" });
     connected = Boolean(status?.connected);
     renderPanel();
     if (connected) await loadCrmContext();
   }
 
   async function connect() {
-    const result = await chrome.runtime.sendMessage({ type: "CONNECT" });
+    connectionError = "";
+    renderPanel();
+    const result = await sendMessage({ type: "CONNECT" });
     connected = Boolean(result?.connected);
+    connectionError = result?.error || "";
     renderPanel();
     if (connected) await loadCrmContext();
   }
@@ -131,7 +136,7 @@
     if (!connected || !contactEmail) return;
     crmLoading = true;
     renderPanel();
-    const result = await chrome.runtime.sendMessage({
+    const result = await sendMessage({
       type: "GET_CONTEXT",
       email: contactEmail
     });
@@ -139,6 +144,18 @@
     crmData = result?.data;
     crmLoading = false;
     renderPanel();
+  }
+
+  async function sendMessage(message) {
+    try {
+      return await chrome.runtime.sendMessage(message);
+    } catch {
+      connected = false;
+      connectionError =
+        "Extension was updated. Reload it in chrome://extensions, then refresh Gmail.";
+      renderPanel();
+      return { connected: false, error: connectionError };
+    }
   }
 
   function crmContactMarkup(data) {
