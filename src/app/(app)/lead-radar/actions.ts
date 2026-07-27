@@ -272,3 +272,38 @@ export async function bulkLeadAction(formData: FormData) {
 
   revalidatePath("/lead-radar");
 }
+
+export async function deleteLead(leadId: string) {
+  const ctx = await context();
+  if (!ctx?.founder) return;
+  const parsed = z.string().uuid().safeParse(leadId);
+  if (!parsed.success) return;
+  const lead = await prisma.lead.findFirst({
+    where: { id: parsed.data, workspaceId: ctx.workspace.id },
+    select: { id: true, title: true, companyId: true },
+  });
+  if (!lead) return;
+  await prisma.$transaction(async (tx) => {
+    await tx.importEvent.deleteMany({
+      where: { workspaceId: ctx.workspace.id, leadId: lead.id },
+    });
+    await tx.rawLeadRecord.deleteMany({ where: { leadId: lead.id } });
+    await tx.lead.delete({ where: { id: lead.id } });
+    await tx.auditLog.create({
+      data: {
+        workspaceId: ctx.workspace.id,
+        userId: ctx.user.id,
+        action: "lead.deleted",
+        recordType: "Lead",
+        recordId: lead.id,
+        source: "MANUAL",
+        oldValue: {
+          title: lead.title,
+          companyId: lead.companyId,
+        },
+      },
+    });
+  });
+  revalidatePath("/lead-radar");
+  revalidatePath("/dashboard");
+}

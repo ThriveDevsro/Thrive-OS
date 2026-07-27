@@ -15,6 +15,7 @@ import { LeadModal } from "./lead-modal";
 import { AiAnalysisPanel } from "./ai-analysis-panel";
 import { LeadBatchCheckbox, LeadBatchControls } from "./lead-batch-controls";
 import { InlineLeadOwner } from "./inline-lead-owner";
+import { DeleteLeadButton } from "./delete-lead-button";
 import { isAiEnabled } from "@/lib/ai/config";
 import {
   analysisSelect,
@@ -262,6 +263,12 @@ export default async function LeadRadarPage({
                           )}
                         </>
                       )}
+                      {founder && (
+                        <DeleteLeadButton
+                          leadId={event.lead.id}
+                          leadTitle={event.lead.title}
+                        />
+                      )}
                     </div>
                     <AiAnalysisPanel
                       leadId={event.lead.id}
@@ -313,15 +320,24 @@ export default async function LeadRadarPage({
                     </td>
                     <td>{lead.assignee?.name ?? "Unassigned"}</td>
                     <td>
-                      {lead.sourceUrl && (
-                        <a
-                          href={lead.sourceUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <ExternalLink size={15} />
-                        </a>
-                      )}
+                      <div className="lead-table-actions">
+                        {lead.sourceUrl && (
+                          <a
+                            href={lead.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <ExternalLink size={15} />
+                          </a>
+                        )}
+                        {founder && (
+                          <DeleteLeadButton
+                            leadId={lead.id}
+                            leadTitle={lead.title}
+                            compact
+                          />
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
