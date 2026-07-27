@@ -117,13 +117,13 @@ export default async function ConnectionsPage({
             </div>
           </>
         ) : configured ? (
-          <Link
+          <a
             className="google-connect-button"
             href="/api/integrations/google/connect"
           >
             <span className="gmail-mark">G</span>
             Continue with Google
-          </Link>
+          </a>
         ) : (
           <div className="connection-admin-required">
             <LockKeyhole />
