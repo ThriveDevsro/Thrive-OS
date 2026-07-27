@@ -9,6 +9,7 @@
   let connected = false;
   let crmData;
   let crmLoading = false;
+  let refreshTimer;
 
   const launcher = document.createElement("button");
   launcher.className = "thrive-gmail-launcher";
@@ -23,7 +24,6 @@
   window.addEventListener("hashchange", scheduleRefresh);
   scheduleRefresh();
 
-  let refreshTimer;
   function scheduleRefresh() {
     window.clearTimeout(refreshTimer);
     refreshTimer = window.setTimeout(refreshContext, 250);
