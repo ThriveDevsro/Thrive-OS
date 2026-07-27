@@ -46,7 +46,7 @@ const nav = [
   ["Brand", "/brand", Palette],
   ["Automations", "/automations", Workflow],
   ["Team", "/team", UsersRound],
-  ["Settings", "/settings", Settings],
+  ["Settings", "/settings/connections", Settings],
 ] as const;
 const highPriorityRoutes = new Set([
   "/dashboard",
