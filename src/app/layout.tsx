@@ -24,6 +24,7 @@ import "./readability.css";
 import "./typography-overrides.css";
 import "./lead-batch.css";
 import "./company-profile-fixes.css";
+import "./company-create.css";
 import "./navigation-performance.css";
 import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
 

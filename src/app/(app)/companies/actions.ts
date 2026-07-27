@@ -13,8 +13,8 @@ export async function createCompany(_: CompanyFormState, formData: FormData): Pr
   if (!session?.user || session.user.role !== "founder") return { message: "You do not have permission to create companies." };
   const parsed = companyInput.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { errors: parsed.error.flatten().fieldErrors, message: "Review the highlighted fields." };
-  const workspace = await prisma.workspace.findUnique({ where: { slug: "thrive-dev" } });
-  const user = await prisma.user.findFirst({ where: { workspaceId: workspace?.id, email: session.user.email ?? undefined } });
+  const workspace = await prisma.workspace.findUnique({ where: { id: session.user.workspaceId } });
+  const user = await prisma.user.findFirst({ where: { id: session.user.id, workspaceId: workspace?.id } });
   if (!workspace || !user) return { message: "Workspace membership could not be resolved." };
   if (parsed.data.domain) {
     const duplicate = await prisma.company.findFirst({ where: { workspaceId: workspace.id, domain: parsed.data.domain, deletedAt: null } });

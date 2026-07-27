@@ -1,0 +1,27 @@
+.company-create{width:min(100%,620px);margin:0 auto;padding-top:10px}
+.company-create .back-link{margin-bottom:16px}
+.company-create-card{overflow:hidden;background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 32px #0f172a0a}
+.company-create-card>header{display:flex;align-items:center;gap:13px;padding:22px 24px;border-bottom:1px solid #eceef1;background:#fafafa}
+.company-create-card>header>span{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#18181b;color:#fff}
+.company-create-card h1{margin:0 0 4px;font-size:20px;letter-spacing:-.035em}
+.company-create-card header p{margin:0;color:#71717a;font-size:10px}
+.company-create-form{padding:24px}
+.company-essential-fields{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:14px}
+.company-create-form label>span{font-size:10px;margin-bottom:7px}
+.company-create-form input,.company-create-form select{height:44px;border-radius:9px;font-size:11px}
+.company-optional{margin-top:18px;border-top:1px solid #eceef1;border-bottom:1px solid #eceef1}
+.company-optional summary{height:48px;display:flex;align-items:center;justify-content:space-between;list-style:none;cursor:pointer;color:#52525b;font-size:10px;font-weight:700}
+.company-optional summary::-webkit-details-marker{display:none}
+.company-optional[open] summary svg{transform:rotate(180deg)}
+.company-optional>div{padding:17px 0;border-top:1px solid #eceef1}
+.company-create-form .form-actions{border-top:0;margin-top:18px;padding-top:0}
+.company-create-form .form-actions a,.company-create-form .form-actions button{height:42px;border-radius:9px;font-size:10px}
+.company-create-form .form-actions button{display:inline-flex;align-items:center;gap:7px;padding:0 17px}
+@media(max-width:700px){
+  .company-create{padding-top:0}
+  .company-create-card{border-radius:13px}
+  .company-create-card>header,.company-create-form{padding:18px}
+  .company-essential-fields{grid-template-columns:1fr}
+  .company-create-form .form-actions{display:grid;grid-template-columns:1fr 1fr}
+  .company-create-form .form-actions a,.company-create-form .form-actions button{justify-content:center}
+}

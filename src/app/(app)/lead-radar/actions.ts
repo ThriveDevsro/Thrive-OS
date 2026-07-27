@@ -1,11 +1,115 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { getAccessContextOrNull } from "@/lib/role-access";
 const context = getAccessContextOrNull;
-const input=z.object({title:z.string().trim().min(3),description:z.string().trim().min(10),sourceUrl:z.string().url().optional().or(z.literal("")).transform(v=>v||undefined),companyName:z.string().trim().optional(),contactName:z.string().trim().optional(),email:z.string().email().optional().or(z.literal("")).transform(v=>v||undefined),country:z.enum(["SK","CZ","GB"]),serviceCategory:z.string().min(2)});
-export async function createManualLead(formData:FormData){const ctx=await context();if(!ctx)return;const parsed=input.safeParse(Object.fromEntries(formData));if(!parsed.success)return;const manual=await prisma.leadSource.findUnique({where:{workspaceId_key:{workspaceId:ctx.workspace.id,key:"manual"}}});if(!manual)return;await prisma.$transaction(async tx=>{const lead=await tx.lead.create({data:{workspaceId:ctx.workspace.id,sourceId:manual.id,title:parsed.data.title,description:parsed.data.description,originalText:parsed.data.description,sourceUrl:parsed.data.sourceUrl,country:parsed.data.country,serviceCategory:parsed.data.serviceCategory,score:0,scoreReasons:[],status:"REVIEW"}});await tx.rawLeadRecord.create({data:{leadId:lead.id,externalId:`manual-${lead.id}`,payload:{...parsed.data,email:parsed.data.email??null},payloadHash:lead.id}});await tx.auditLog.create({data:{workspaceId:ctx.workspace.id,userId:ctx.user.id,action:"lead.created",recordType:"Lead",recordId:lead.id,source:"MANUAL",newValue:{title:lead.title}}})});revalidatePath("/lead-radar")}
+const input = z.object({
+  title: z.string().trim().min(3, "Enter at least 3 characters."),
+  description: z.string().trim().min(10, "Add a little more detail."),
+  sourceUrl: z.string().url("Enter a valid source URL.").optional().or(z.literal("")).transform((value) => value || undefined),
+  email: z.string().email("Enter a valid email.").optional().or(z.literal("")).transform((value) => value || undefined),
+  country: z.enum(["SK", "CZ", "GB"]),
+  serviceCategory: z.string().min(2),
+});
+
+export type ManualLeadState = {
+  message?: string;
+  errors?: Record<string, string[]>;
+};
+
+export async function createManualLead(
+  _state: ManualLeadState,
+  formData: FormData,
+): Promise<ManualLeadState> {
+  const ctx = await context();
+  if (!ctx) return { message: "Your session has expired. Sign in again." };
+  const parsed = input.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return {
+      message: "Check the highlighted fields.",
+      errors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const manual = await tx.leadSource.upsert({
+        where: {
+          workspaceId_key: { workspaceId: ctx.workspace.id, key: "manual" },
+        },
+        update: { active: true },
+        create: {
+          workspaceId: ctx.workspace.id,
+          key: "manual",
+          name: "Manual",
+          method: "MANUAL",
+          active: true,
+        },
+      });
+      const lead = await tx.lead.create({
+        data: {
+          workspaceId: ctx.workspace.id,
+          sourceId: manual.id,
+          assigneeId: ctx.user.id,
+          title: parsed.data.title,
+          description: parsed.data.description,
+          originalText: parsed.data.description,
+          sourceUrl: parsed.data.sourceUrl,
+          country: parsed.data.country,
+          serviceCategory: parsed.data.serviceCategory,
+          score: 0,
+          scoreReasons: [],
+          status: "REVIEW",
+        },
+      });
+      const payload = { ...parsed.data, email: parsed.data.email ?? null };
+      await tx.rawLeadRecord.create({
+        data: {
+          leadId: lead.id,
+          externalId: `manual-${lead.id}`,
+          payload,
+          payloadHash: lead.id,
+        },
+      });
+      await tx.importEvent.create({
+        data: {
+          workspaceId: ctx.workspace.id,
+          sourceName: "Manual",
+          sourceType: "MANUAL",
+          externalId: `manual-${lead.id}`,
+          sourceUrl: parsed.data.sourceUrl,
+          dedupeKey: lead.id,
+          canonicalKey: `manual:${lead.id}`,
+          status: "NEW",
+          leadId: lead.id,
+          metadata: {
+            country: lead.country,
+            serviceCategory: lead.serviceCategory,
+          },
+          rawPayload: payload,
+        },
+      });
+      await tx.auditLog.create({
+        data: {
+          workspaceId: ctx.workspace.id,
+          userId: ctx.user.id,
+          action: "lead.created",
+          recordType: "Lead",
+          recordId: lead.id,
+          source: "MANUAL",
+          newValue: { title: lead.title },
+        },
+      });
+    });
+  } catch {
+    return { message: "The lead could not be saved. Please try again." };
+  }
+
+  revalidatePath("/lead-radar");
+  redirect("/lead-radar");
+}
 export async function assignLead(formData:FormData){const ctx=await context();if(!ctx)return;const id=String(formData.get("id")??"");const assigneeId=String(formData.get("assigneeId")??"");const [user,lead]=await Promise.all([prisma.user.findFirst({where:{id:assigneeId,workspaceId:ctx.workspace.id,status:"ACTIVE"}}),prisma.lead.findFirst({where:{id,workspaceId:ctx.workspace.id}})]);if(!user||!lead)return;await prisma.$transaction([prisma.lead.update({where:{id},data:{assigneeId,status:"ASSIGNED"}}),prisma.auditLog.create({data:{workspaceId:ctx.workspace.id,userId:ctx.user.id,action:"lead.assigned",recordType:"Lead",recordId:id,source:"MANUAL",newValue:{assigneeId}}})]);revalidatePath("/lead-radar")}
 
 export async function setImportDecision(formData:FormData){
