@@ -1,11 +1,10 @@
 "use client";
 
-import { Activity, Database, Radar } from "lucide-react";
+import { Activity, Radar } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
-  ["Workspace", "/settings", Database],
   ["Lead sources", "/settings/sources", Radar],
   ["Audit log", "/settings/audit", Activity],
 ] as const;
@@ -18,8 +17,7 @@ export function SettingsNav() {
         <Link
           key={href}
           className={
-            pathname === href ||
-            (href !== "/settings" && pathname.startsWith(`${href}/`))
+            pathname === href || pathname.startsWith(`${href}/`)
               ? "active"
               : ""
           }

@@ -2,9 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
 
-export type SettingsState = { ok?: string; error?: string };
 async function founderContext() {
   const session = await auth();
   if (
@@ -24,41 +22,6 @@ async function founderContext() {
     },
   });
   return workspace && user ? { workspace, user } : null;
-}
-
-export async function updateWorkspace(
-  _: SettingsState,
-  formData: FormData,
-): Promise<SettingsState> {
-  const context = await founderContext();
-  if (!context) return { error: "Founder permission is required." };
-  const parsed = z
-    .object({
-      name: z.string().trim().min(2).max(100),
-      timezone: z.enum(["Europe/Bratislava", "Europe/Prague", "Europe/London"]),
-      currency: z.enum(["EUR", "CZK", "GBP"]),
-    })
-    .safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { error: "Check the workspace values." };
-  await prisma.$transaction([
-    prisma.workspace.update({
-      where: { id: context.workspace.id },
-      data: parsed.data,
-    }),
-    prisma.auditLog.create({
-      data: {
-        workspaceId: context.workspace.id,
-        userId: context.user.id,
-        action: "workspace.settings.updated",
-        recordType: "Workspace",
-        recordId: context.workspace.id,
-        source: "MANUAL",
-        newValue: parsed.data,
-      },
-    }),
-  ]);
-  revalidatePath("/settings");
-  return { ok: "Workspace settings saved." };
 }
 
 export async function updateLeadSource(formData: FormData): Promise<void> {
@@ -95,6 +58,5 @@ export async function updateLeadSource(formData: FormData): Promise<void> {
       },
     }),
   ]);
-  revalidatePath("/settings");
   revalidatePath("/settings/sources");
 }
