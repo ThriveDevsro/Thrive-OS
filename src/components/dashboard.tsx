@@ -4,7 +4,6 @@ import {
   BarChart3,
   BriefcaseBusiness,
   Building2,
-  CalendarDays,
   CalendarClock,
   CheckCircle2,
   Inbox,
@@ -58,11 +57,8 @@ export function Dashboard({
           <h1>Good {dayPart()}, {firstName}.</h1>
         </div>
         <time className="dashboard-current-date" dateTime={dateKey()}>
-          <CalendarDays />
-          <span>
-            <small>Today</small>
-            <strong>{currentDate()}</strong>
-          </span>
+          <small>Today</small>
+          <strong>{currentDate()}</strong>
         </time>
       </div>
       <section className="dashboard-priority-grid">
