@@ -33,7 +33,7 @@ export function AiAnalysisPanel({
   const [analysis, setAnalysis] = useState(initialAnalysis);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(Boolean(initialAnalysis));
+  const [open, setOpen] = useState(false);
 
   async function analyze(force = false) {
     setPending(true);
@@ -85,36 +85,33 @@ export function AiAnalysisPanel({
 
   if (!enabled) {
     return (
-      <section className="lead-ai-panel disabled">
-        <BrainCircuit size={16} />
-        <div>
-          <strong>AI Analysis</strong>
-          <small>AI is disabled for this workspace.</small>
-        </div>
+      <section className="lead-ai-panel compact disabled">
+        <button type="button" disabled title="AI is disabled for this workspace">
+          <BrainCircuit size={15} /> AI unavailable
+        </button>
       </section>
     );
   }
 
   return (
-    <section className={`lead-ai-panel ${open ? "open" : ""}`}>
+    <section className={`lead-ai-panel compact ${open ? "open" : ""}`}>
       <header>
-        <button type="button" onClick={() => setOpen((value) => !value)}>
-          <BrainCircuit size={16} />
-          <span>
-            <strong>AI Analysis</strong>
-            <small>{statusText(analysis, pending, error)}</small>
-          </span>
-          <ChevronDown size={15} />
+        <button
+          type="button"
+          className="ai-single-button"
+          onClick={() => {
+            if (!analysis && !pending) void analyze();
+            else setOpen((value) => !value);
+          }}
+        >
+          {pending ? (
+            <LoaderCircle className="spin" size={15} />
+          ) : (
+            <BrainCircuit size={15} />
+          )}
+          {buttonText(analysis, pending, error)}
+          {analysis && <ChevronDown size={14} />}
         </button>
-        {!analysis && !pending && (
-          <button
-            type="button"
-            className="ai-analyze-button"
-            onClick={() => analyze()}
-          >
-            <Sparkles size={14} /> Analyze lead
-          </button>
-        )}
       </header>
       {open && (
         <div className="lead-ai-content">
@@ -275,15 +272,15 @@ function TagGroup({
   );
 }
 
-function statusText(
+function buttonText(
   analysis: PublicAnalysis | null,
   pending: boolean,
   error: string | null,
 ) {
-  if (pending) return "Processing";
-  if (error) return "Failed";
-  if (!analysis) return "Not analyzed";
-  return analysis.status.toLowerCase();
+  if (pending) return "Analyzing…";
+  if (error) return "Try AI analysis again";
+  if (!analysis) return "Analyze with AI";
+  return "View AI analysis";
 }
 
 function budget(analysis: PublicAnalysis) {
