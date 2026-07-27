@@ -40,7 +40,7 @@ export function ComposeModal({
             <header>
               <div>
                 <h2>New conversation</h2>
-                <p>Start an email or record an outgoing message.</p>
+                <p>Send an email through your connected Gmail account.</p>
               </div>
               <button onClick={() => setOpen(false)} aria-label="Close">
                 <X size={19} />
@@ -83,7 +83,7 @@ export function ComposeModal({
                   {pending ? (
                     <LoaderCircle className="spin" size={15} />
                   ) : (
-                    "Add message"
+                    "Send email"
                   )}
                 </button>
               </footer>

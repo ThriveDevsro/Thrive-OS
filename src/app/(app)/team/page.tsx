@@ -1,6 +1,5 @@
 import {
   BriefcaseBusiness,
-  CheckCircle2,
   Radar,
   ShieldCheck,
   UserRoundCheck,
@@ -156,30 +155,6 @@ export default async function TeamPage() {
             </article>
           );
         })}
-      </section>
-      <section className="role-overview">
-        <header>
-          <h2>Roles and permissions</h2>
-          <p>Quick overview of access assigned in this workspace.</p>
-        </header>
-        <div>
-          {roles.map((role) => (
-            <article key={role.id}>
-              <span>
-                <ShieldCheck />
-              </span>
-              <div>
-                <strong>{role.name}</strong>
-                <p>{role.description ?? "Workspace access role"}</p>
-              </div>
-              <small>
-                {role._count.users} members · {role._count.permissions}{" "}
-                permissions
-              </small>
-              <CheckCircle2 />
-            </article>
-          ))}
-        </div>
       </section>
     </>
   );

@@ -668,6 +668,7 @@ model EmailMessage {
   threadId       String        @db.Uuid
   thread         EmailThread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
   providerId     String
+  internetMessageId String?
   sender         String
   recipients     Json
   subject        String

@@ -12,8 +12,8 @@ import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
-  CircleGauge,
   Inbox,
+  LayoutDashboard,
   LogOut,
   Menu,
   Radar,
@@ -35,7 +35,7 @@ const AiCopilot = dynamic(
 );
 
 const nav = [
-  ["Dashboard", "/dashboard", CircleGauge],
+  ["Dashboard", "/dashboard", LayoutDashboard],
   ["Lead Radar", "/lead-radar", Radar],
   ["Companies", "/companies", Building2],
   ["Deals", "/deals", BriefcaseBusiness],
@@ -164,7 +164,6 @@ export function AppShell({
             >
               <Icon size={19} />
               <span>{label}</span>
-              {label === "Inbox" && <b>3</b>}
             </Link>
           ))}
         </nav>

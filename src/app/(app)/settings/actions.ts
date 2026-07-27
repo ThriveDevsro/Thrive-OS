@@ -7,14 +7,20 @@ import { z } from "zod";
 export type SettingsState = { ok?: string; error?: string };
 async function founderContext() {
   const session = await auth();
-  if (!session?.user || session.user.role !== "founder") return null;
+  if (
+    !session?.user ||
+    session.user.role !== "founder" ||
+    !session.user.workspaceId
+  )
+    return null;
   const workspace = await prisma.workspace.findUnique({
-    where: { slug: "thrive-dev" },
+    where: { id: session.user.workspaceId },
   });
   const user = await prisma.user.findFirst({
     where: {
       workspaceId: workspace?.id,
-      email: session.user.email ?? undefined,
+      id: session.user.id,
+      status: "ACTIVE",
     },
   });
   return workspace && user ? { workspace, user } : null;

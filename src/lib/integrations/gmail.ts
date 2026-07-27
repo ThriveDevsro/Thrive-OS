@@ -6,6 +6,7 @@ import {
   oauthConfig,
 } from "./oauth";
 import { emitAutomationEvent } from "@/lib/automations/engine";
+import { buildMimeMessage } from "./mime";
 
 type GmailHeader = { name?: string; value?: string };
 type GmailPart = {
@@ -20,6 +21,22 @@ type GmailMessage = {
   internalDate?: string;
   labelIds?: string[];
   payload?: GmailPart & { headers?: GmailHeader[] };
+};
+
+type SendGmailInput = {
+  accountId: string;
+  recipient: string;
+  subject: string;
+  body: string;
+  providerThreadId?: string | null;
+  inReplyTo?: string | null;
+};
+
+type SentGmailMessage = {
+  providerId: string;
+  providerThreadId: string;
+  internetMessageId: string;
+  sentAt: Date;
 };
 
 export async function syncGmailAccount(accountId: string) {
@@ -145,6 +162,7 @@ export async function syncGmailAccount(accountId: string) {
             accountId: account.id,
             threadId: thread.id,
             providerId: message.id,
+            internetMessageId: header(headers, "Message-ID") || null,
             sender: senderAddress || sender,
             recipients,
             subject,
@@ -158,6 +176,7 @@ export async function syncGmailAccount(accountId: string) {
             subject,
             direction,
             sentAt,
+            internetMessageId: header(headers, "Message-ID") || null,
           },
         });
         if (contact) {
@@ -212,6 +231,62 @@ export async function syncGmailAccount(accountId: string) {
     });
     throw new Error("GMAIL_SYNC_FAILED");
   }
+}
+
+export async function sendGmailMessage(
+  input: SendGmailInput,
+): Promise<SentGmailMessage> {
+  const account = await prisma.emailAccount.findFirst({
+    where: { id: input.accountId, provider: "google", active: true },
+  });
+  if (!account) throw new Error("GMAIL_ACCOUNT_NOT_FOUND");
+  const stored = account.config as Record<string, unknown>;
+  const scopes = Array.isArray(stored.scopes)
+    ? stored.scopes.filter((value): value is string => typeof value === "string")
+    : [];
+  if (!scopes.includes("https://www.googleapis.com/auth/gmail.send")) {
+    throw new Error("GMAIL_RECONNECT_REQUIRED");
+  }
+
+  const internetMessageId = `<${crypto.randomUUID()}@thrivedev.co>`;
+  const raw = buildMimeMessage({
+    from: account.address,
+    to: input.recipient,
+    subject: input.subject,
+    body: input.body,
+    messageId: internetMessageId,
+    inReplyTo: input.inReplyTo,
+  });
+  const accessToken = await accessTokenFor(account);
+  const response = await fetch(
+    "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        raw: Buffer.from(raw, "utf8").toString("base64url"),
+        ...(input.providerThreadId
+          ? { threadId: input.providerThreadId }
+          : {}),
+      }),
+      signal: AbortSignal.timeout(15_000),
+    },
+  );
+  if (response.status === 401 || response.status === 403) {
+    throw new Error("GMAIL_RECONNECT_REQUIRED");
+  }
+  if (!response.ok) throw new Error("GMAIL_SEND_FAILED");
+  const sent = (await response.json()) as { id?: string; threadId?: string };
+  if (!sent.id || !sent.threadId) throw new Error("GMAIL_SEND_FAILED");
+  return {
+    providerId: sent.id,
+    providerThreadId: sent.threadId,
+    internetMessageId,
+    sentAt: new Date(),
+  };
 }
 
 async function accessTokenFor(account: Prisma.EmailAccountGetPayload<object>) {

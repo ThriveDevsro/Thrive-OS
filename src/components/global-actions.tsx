@@ -38,17 +38,6 @@ export function GlobalSearch() {
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setOpen(true);
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
-
-  useEffect(() => {
     if (open) setTimeout(() => input.current?.focus(), 0);
   }, [open]);
   useEffect(() => {
@@ -84,7 +73,6 @@ export function GlobalSearch() {
       >
         <Search size={17} />
         <span>Search CRM or ask Thrive AI…</span>
-        <kbd>⌘ K</kbd>
       </button>
       {open && (
         <div

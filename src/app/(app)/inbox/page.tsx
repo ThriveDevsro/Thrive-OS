@@ -4,14 +4,13 @@ import {
   CheckCircle2,
   Inbox,
   Mail,
-  MessageSquareReply,
   Search,
-  Send,
   Settings2,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { ComposeModal } from "./compose-modal";
-import { replyToConversation, setConversationStatus } from "./actions";
+import { setConversationStatus } from "./actions";
+import { ReplyForm } from "./reply-form";
 import { getAccessContext } from "@/lib/role-access";
 import { measureServerOperation } from "@/lib/performance";
 
@@ -207,26 +206,7 @@ export default async function InboxPage({
                   );
                 })}
               </div>
-              <form action={replyToConversation} className="reply-box">
-                <input type="hidden" name="threadId" value={selected.id} />
-                <input type="hidden" name="recipient" value={peer} />
-                <textarea
-                  name="message"
-                  required
-                  placeholder="Write a reply…"
-                  rows={3}
-                />
-                <footer>
-                  <span>
-                    <MessageSquareReply />
-                    Replying to {peer}
-                  </span>
-                  <button>
-                    <Send />
-                    Add reply
-                  </button>
-                </footer>
-              </form>
+              <ReplyForm threadId={selected.id} recipient={peer} />
             </>
           ) : (
             <div className="conversation-empty">

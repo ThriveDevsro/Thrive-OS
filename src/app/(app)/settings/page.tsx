@@ -6,8 +6,6 @@ import {
   KeyRound,
   Mail,
   Radar,
-  ShieldCheck,
-  Smartphone,
   UsersRound,
 } from "lucide-react";
 import Link from "next/link";
@@ -27,7 +25,7 @@ export default async function SettingsPage() {
         take: 20,
       },
       emailAccounts: { orderBy: { createdAt: "desc" } },
-      _count: { select: { users: true, auditLogs: true } },
+      _count: { select: { auditLogs: true } },
     },
   });
   if (!workspace)
@@ -65,10 +63,6 @@ export default async function SettingsPage() {
             <UsersRound size={15} />
             Team & permissions
           </Link>
-          <a href="#security">
-            <ShieldCheck size={15} />
-            Privacy & security
-          </a>
           <a href="#audit-log">
             <Activity size={15} />
             Audit log
@@ -86,7 +80,10 @@ export default async function SettingsPage() {
                 Configured
               </span>
             </header>
-            <WorkspaceForm workspace={workspace} />
+            <WorkspaceForm
+              key={`${workspace.name}:${workspace.timezone}:${workspace.currency}`}
+              workspace={workspace}
+            />
           </section>
           <section className="settings-card" id="lead-sources">
             <header>
@@ -190,42 +187,6 @@ export default async function SettingsPage() {
                 detail="Generic company mailbox"
                 configured={false}
               />
-            </div>
-          </section>
-          <section className="settings-card" id="security">
-            <header>
-              <div>
-                <h2>Installation and security</h2>
-                <p>
-                  Thrive OS is ready as an installable PWA after HTTPS
-                  deployment.
-                </p>
-              </div>
-            </header>
-            <div className="security-grid">
-              <div>
-                <Smartphone />
-                <span>
-                  <strong>Mobile & desktop</strong>
-                  <small>iOS, Android, macOS and Windows</small>
-                </span>
-              </div>
-              <div>
-                <ShieldCheck />
-                <span>
-                  <strong>Protected workspace</strong>
-                  <small>
-                    {workspace._count.users} users · capability permissions
-                  </small>
-                </span>
-              </div>
-              <div>
-                <Activity />
-                <span>
-                  <strong>Audit history</strong>
-                  <small>{workspace._count.auditLogs} immutable events</small>
-                </span>
-              </div>
             </div>
           </section>
           <section className="settings-card" id="audit-log">
