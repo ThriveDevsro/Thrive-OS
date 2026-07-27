@@ -21,7 +21,15 @@ import {
   serializeAnalysis,
 } from "@/lib/ai/lead-analysis/service";
 
-type Params = { view?: string; status?: string; source?: string; q?: string };
+type Params = {
+  view?: string;
+  status?: string;
+  source?: string;
+  country?: string;
+  q?: string;
+};
+
+const supportedCountries = new Set(["SK", "CZ", "GB"]);
 
 export default async function LeadRadarPage({
   searchParams,
@@ -34,6 +42,14 @@ export default async function LeadRadarPage({
   const status = params.status || (inbox ? "NEW" : "");
   const q = params.q?.trim() ?? "";
   const source = params.source ?? "";
+  const country = supportedCountries.has(params.country ?? "")
+    ? params.country!
+    : "";
+  const leadFilters = {
+    ...(q ? { title: { contains: q, mode: "insensitive" as const } } : {}),
+    ...(country ? { country } : {}),
+    ...(!founder ? { assigneeId: user.id } : {}),
+  };
 
   const [events, allLeads, users, sources] = await Promise.all([
     prisma.importEvent.findMany({
@@ -41,15 +57,7 @@ export default async function LeadRadarPage({
         workspaceId: workspace.id,
         ...(status ? { status } : {}),
         ...(source ? { sourceName: source } : {}),
-        ...(q ? { lead: { title: { contains: q, mode: "insensitive" } } } : {}),
-        ...(!founder
-          ? {
-              lead: {
-                assigneeId: user.id,
-                ...(q ? { title: { contains: q, mode: "insensitive" } } : {}),
-              },
-            }
-          : {}),
+        ...(Object.keys(leadFilters).length ? { lead: leadFilters } : {}),
       },
       include: {
         lead: {
@@ -72,8 +80,7 @@ export default async function LeadRadarPage({
     prisma.lead.findMany({
       where: {
         workspaceId: workspace.id,
-        ...(!founder ? { assigneeId: user.id } : {}),
-        ...(q ? { title: { contains: q, mode: "insensitive" } } : {}),
+        ...leadFilters,
       },
       include: { source: true, assignee: true, company: true },
       orderBy: { createdAt: "desc" },
@@ -139,6 +146,12 @@ export default async function LeadRadarPage({
             </select>
           </>
         )}
+        <select name="country" defaultValue={country}>
+          <option value="">All countries</option>
+          <option value="SK">SK</option>
+          <option value="CZ">CZ</option>
+          <option value="GB">UK</option>
+        </select>
         <button>
           <Filter size={15} /> Filter
         </button>
