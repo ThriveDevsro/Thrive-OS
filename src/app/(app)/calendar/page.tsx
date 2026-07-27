@@ -38,7 +38,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const upcoming=meetings.filter(event=>event.endsAt>=today).slice(0,8);
 
   return <>
-    <div className="list-heading calendar-heading"><div><p className="eyebrow">PLANNING · COMPANY CALENDAR</p><h1>Calendar</h1><p>Shared meetings, internal events, deadlines and private reminders</p></div><OpenCalendarModal/></div>
+    <div className="list-heading calendar-heading"><div><h1>Calendar</h1><p>Shared meetings, internal events, deadlines and private reminders</p></div><OpenCalendarModal/></div>
     <nav className="calendar-view-switch" aria-label="Calendar view">
       <Link className={!weekView?"active":""} href={`/calendar?month=${year}-${String(monthIndex+1).padStart(2,"0")}`}>Month</Link>
       <Link className={weekView?"active":""} href={`/calendar?view=week&date=${localDate(selectedDate)}`}>Week</Link>

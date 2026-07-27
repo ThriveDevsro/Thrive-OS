@@ -40,7 +40,6 @@ export default async function SettingsPage() {
     <>
       <div className="list-heading settings-heading">
         <div>
-          <p className="eyebrow">ADMINISTRATION</p>
           <h1>Settings</h1>
           <p>Workspace, sources, integrations, security and data controls</p>
         </div>

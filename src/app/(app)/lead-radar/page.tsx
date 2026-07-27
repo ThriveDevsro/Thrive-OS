@@ -100,7 +100,6 @@ export default async function LeadRadarPage({
     <>
       <div className="list-heading lead-heading">
         <div>
-          <p className="eyebrow">LEADS</p>
           <h1>Lead Inbox</h1>
           <p>Review incoming opportunities and move the good ones forward.</p>
         </div>

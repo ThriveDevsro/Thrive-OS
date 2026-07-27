@@ -55,15 +55,6 @@ export function Dashboard({
     <>
       <div className="page-heading role-dashboard-heading">
         <div>
-          <p className="eyebrow">
-            {new Date()
-              .toLocaleDateString("en-GB", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-              })
-              .toUpperCase()}
-          </p>
           <h1>
             Good {dayPart()}, {firstName}.
           </h1>

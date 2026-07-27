@@ -60,7 +60,6 @@ export default async function CompanyPage({
           {company.name.slice(0, 2).toUpperCase()}
         </span>
         <div>
-          <p className="eyebrow">COMPANY PROFILE</p>
           <h1>{company.name}</h1>
           <p>
             {company.industry ?? "Unclassified"} ·{" "}

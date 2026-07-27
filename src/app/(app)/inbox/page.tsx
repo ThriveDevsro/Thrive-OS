@@ -73,7 +73,6 @@ export default async function InboxPage({
     <>
       <div className="list-heading inbox-heading">
         <div>
-          <p className="eyebrow">COMMUNICATION · SHARED INBOX</p>
           <h1>Inbox</h1>
           <p>Customer conversations visible to the whole Thrive team</p>
         </div>

@@ -42,7 +42,6 @@ export default async function TeamPage() {
     <>
       <div className="list-heading">
         <div>
-          <p className="eyebrow">ADMIN · PEOPLE & ACCESS</p>
           <h1>Team</h1>
           <p>Members, workload and workspace access</p>
         </div>

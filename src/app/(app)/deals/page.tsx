@@ -21,7 +21,7 @@ export default async function DealsPage({ searchParams }: { searchParams: Promis
   const total = deals.reduce((sum, deal) => sum + Number(deal.valueMinor), 0) / 100;
 
   return <>
-    <div className="list-heading"><div><p className="eyebrow">SALES</p><h1>Deals</h1><p>{deals.length} open deals · €{total.toLocaleString("en-GB")} pipeline</p></div><DealModal companies={companies} stages={active.map(({ id, name }) => ({ id, name }))} /></div>
+    <div className="list-heading"><div><h1>Deals</h1><p>{deals.length} open deals · €{total.toLocaleString("en-GB")} pipeline</p></div><DealModal companies={companies} stages={active.map(({ id, name }) => ({ id, name }))} /></div>
     <nav className="view-tabs">
       <Link className={view !== "pipeline" ? "active" : ""} href="/deals"><List size={15} /> All deals</Link>
       <Link className={view === "pipeline" ? "active" : ""} href="/deals?view=pipeline"><Columns3 size={15} /> Pipeline</Link>

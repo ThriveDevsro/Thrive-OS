@@ -56,9 +56,6 @@ export default async function AnalyticsPage() {
     <>
       <div className="list-heading">
         <div>
-          <p className="eyebrow">
-            PERFORMANCE · {founder ? "COMPANY" : "MY RESULTS"}
-          </p>
           <h1>Analytics</h1>
           <p>
             {founder

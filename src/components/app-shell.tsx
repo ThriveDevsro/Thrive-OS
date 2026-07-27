@@ -196,12 +196,21 @@ export function AppShell({
             onClick={() => setOpen(false)}
           />
           <aside id="mobile-navigation" className="mobile-drawer">
-            <div className="mobile-sheet-handle" />
             <header>
-              <div>
-                <strong>Menu</strong>
-                <small>Everything in Thrive OS</small>
-              </div>
+              <Link
+                href="/dashboard"
+                className="mobile-drawer-brand"
+                onNavigate={() => setOpen(false)}
+              >
+                <Image
+                  src="/thrive-dev-logo.png"
+                  alt="Thrive Dev"
+                  width={717}
+                  height={197}
+                  priority
+                />
+                <small>Workspace navigation</small>
+              </Link>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -210,6 +219,7 @@ export function AppShell({
                 <X size={23} />
               </button>
             </header>
+            <p className="mobile-nav-label">Workspace</p>
             <nav>
               {visibleNav.map(([label, href, Icon]) => (
                 <Link
@@ -223,13 +233,16 @@ export function AppShell({
                   className={active(href) ? "active" : ""}
                   aria-current={active(href) ? "page" : undefined}
                 >
-                  <Icon size={20} />
+                  <i>
+                    <Icon size={19} />
+                  </i>
                   <span>{label}</span>
+                  <ChevronRight className="mobile-nav-chevron" size={17} />
                 </Link>
               ))}
             </nav>
             <footer>
-              <span className="avatar">PK</span>
+              <span className="avatar">{initials(userName)}</span>
               <div>
                 <strong>{userName}</strong>
                 <small>{userEmail}</small>
@@ -297,4 +310,14 @@ export function AppShell({
 function persistSidebarPreference(collapsed: boolean) {
   window.localStorage.setItem("thrive:sidebar-collapsed", String(collapsed));
   document.cookie = `thrive-sidebar-collapsed=${collapsed ? "1" : "0"}; Path=/; Max-Age=31536000; SameSite=Lax`;
+}
+
+function initials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }

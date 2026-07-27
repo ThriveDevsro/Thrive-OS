@@ -6,7 +6,6 @@ export function ModuleState({ title }: { title: string }) {
       <span className="module-icon">
         <Construction size={27} />
       </span>
-      <p className="eyebrow">PLANNED MODULE</p>
       <h1>{title}</h1>
       <p>
         This area is intentionally gated until its implementation phase. The

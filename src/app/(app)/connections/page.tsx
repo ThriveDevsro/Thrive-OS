@@ -42,7 +42,6 @@ export default async function ConnectionsPage({
           <Mail />
         </span>
         <div>
-          <p className="eyebrow">PERSONAL EMAIL</p>
           <h1>Connect Gmail</h1>
           <p>
             Automatically log work conversations with existing CRM contacts.
