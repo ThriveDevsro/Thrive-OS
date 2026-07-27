@@ -61,6 +61,10 @@ export function Dashboard({
               : `Good ${dayPart()}, ${firstName}. Here are your leads, deals and next actions.`}
           </p>
         </div>
+        <time className="dashboard-current-date" dateTime={dateKey()}>
+          <span>Today</span>
+          <strong>{currentDate()}</strong>
+        </time>
       </div>
       <section className="dashboard-priority-grid">
         <Metric
@@ -294,6 +298,25 @@ function Empty({ icon, text }: { icon: React.ReactNode; text: string }) {
       <span>{text}</span>
     </div>
   );
+}
+
+function currentDate() {
+  return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/Bratislava",
+  }).format(new Date());
+}
+
+function dateKey() {
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Europe/Bratislava",
+  }).format(new Date());
 }
 function money(value: number) {
   return new Intl.NumberFormat("en-GB", {
