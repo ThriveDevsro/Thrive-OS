@@ -4,9 +4,25 @@ import {
   createPkce,
   decryptProviderTokens,
   encryptProviderTokens,
+  resolveOAuthAppUrl,
 } from "./oauth";
 
 describe("integration OAuth security", () => {
+  it("always uses the canonical Thrive OS domain in production", () => {
+    expect(resolveOAuthAppUrl("http://localhost:3001", "production")).toBe(
+      "https://app.thrivedev.co",
+    );
+    expect(resolveOAuthAppUrl("https://preview.vercel.app", "production")).toBe(
+      "https://app.thrivedev.co",
+    );
+  });
+
+  it("allows a local callback origin during development", () => {
+    expect(resolveOAuthAppUrl("http://localhost:3001/", "development")).toBe(
+      "http://localhost:3001",
+    );
+  });
+
   it("creates unique PKCE verifier, challenge and state values", () => {
     const first = createPkce();
     const second = createPkce();

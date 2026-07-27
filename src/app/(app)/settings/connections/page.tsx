@@ -6,7 +6,6 @@ import {
   LockKeyhole,
   Mail,
   RefreshCw,
-  ShieldCheck,
   Unplug,
 } from "lucide-react";
 import { getAccessContext } from "@/lib/role-access";
@@ -139,17 +138,6 @@ export default async function ConnectionsPage({
             </div>
           </div>
         )}
-      </section>
-      <section className="connection-privacy">
-        <ShieldCheck />
-        <div>
-          <strong>Private by default</strong>
-          <p>
-            Thrive OS requests read-only Gmail access. It imports only messages
-            involving known CRM contacts, ignores spam, trash and promotions,
-            encrypts Google tokens, and never receives your Google password.
-          </p>
-        </div>
       </section>
     </div>
   );

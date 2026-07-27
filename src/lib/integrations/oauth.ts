@@ -8,8 +8,18 @@ import { AiError } from "@/lib/ai/errors";
 
 export type OAuthProvider = "google" | "microsoft";
 
+const PRODUCTION_APP_URL = "https://app.thrivedev.co";
+
+export function resolveOAuthAppUrl(
+  configuredUrl: string | undefined,
+  nodeEnv = process.env.NODE_ENV,
+) {
+  if (nodeEnv === "production") return PRODUCTION_APP_URL;
+  return configuredUrl?.replace(/\/$/, "") || "http://localhost:3001";
+}
+
 export function oauthConfig(provider: OAuthProvider) {
-  const appUrl = process.env.APP_URL;
+  const appUrl = resolveOAuthAppUrl(process.env.APP_URL);
   const encryptionKey = process.env.INTEGRATION_ENCRYPTION_KEY;
   const clientId =
     provider === "google"
@@ -19,12 +29,12 @@ export function oauthConfig(provider: OAuthProvider) {
     provider === "google"
       ? process.env.GOOGLE_OAUTH_CLIENT_SECRET
       : process.env.MICROSOFT_OAUTH_CLIENT_SECRET;
-  if (!appUrl || !clientId || !clientSecret || !encryptionKey) {
+  if (!clientId || !clientSecret || !encryptionKey) {
     throw new AiError("AI_CONFIG_INVALID", 503);
   }
   const key = Buffer.from(encryptionKey, "base64");
   if (key.length !== 32) throw new AiError("AI_CONFIG_INVALID", 503);
-  const redirectUri = `${appUrl.replace(/\/$/, "")}/api/integrations/${provider}/callback`;
+  const redirectUri = `${appUrl}/api/integrations/${provider}/callback`;
   return provider === "google"
     ? {
         provider,
