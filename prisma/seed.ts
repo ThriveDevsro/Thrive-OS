@@ -57,52 +57,6 @@ async function main() {
       update: {},
       create: { workspaceId: workspace.id, ...source },
     });
-  if (
-    (await prisma.automation.count({
-      where: { workspaceId: workspace.id },
-    })) === 0
-  )
-    await prisma.automation.createMany({
-      data: [
-        {
-          workspaceId: workspace.id,
-          name: "Proposal follow-up",
-          trigger: { event: "opportunity.stage_changed" },
-          conditions: [
-            { field: "stage", operator: "eq", value: "proposal_sent" },
-          ],
-          actions: [{ type: "schedule_follow_up", days: 3 }],
-          active: false,
-        },
-        {
-          workspaceId: workspace.id,
-          name: "Stale opportunity warning",
-          trigger: { event: "no_activity" },
-          conditions: [{ field: "days", operator: "gte", value: 7 }],
-          actions: [{ type: "notify_owner" }],
-          active: true,
-        },
-      ],
-    });
-  if (
-    !(await prisma.automation.findFirst({
-      where: { workspaceId: workspace.id, name: "Incoming CRM email" },
-    }))
-  ) {
-    await prisma.automation.create({
-      data: {
-        workspaceId: workspace.id,
-        name: "Incoming CRM email",
-        trigger: { event: "email.received" },
-        conditions: [{ field: "direction", operator: "eq", value: "INBOUND" }],
-        actions: [
-          { type: "set_thread_status", status: "WAITING_FOR_US" },
-          { type: "notify_owner", title: "Customer email needs a reply" },
-        ],
-        active: true,
-      },
-    });
-  }
   for (const key of capabilities)
     await prisma.permission.upsert({
       where: { key },
@@ -113,14 +67,14 @@ async function main() {
     where: { workspaceId_key: { workspaceId: workspace.id, key: "founder" } },
     update: {
       description:
-        "Full company access, team administration, settings, automations and audit history.",
+        "Full company access, team administration, settings and audit history.",
     },
     create: {
       workspaceId: workspace.id,
       key: "founder",
       name: "Founder / Super Admin",
       description:
-        "Full company access, team administration, settings, automations and audit history.",
+        "Full company access, team administration, settings and audit history.",
       system: true,
     },
   });
@@ -130,14 +84,14 @@ async function main() {
     },
     update: {
       description:
-        "Access to assigned leads, owned companies and deals, personal tasks, shared inbox and calendar.",
+        "Access to assigned leads, owned companies and deals, personal tasks and calendar.",
     },
     create: {
       workspaceId: workspace.id,
       key: "salesperson",
       name: "Salesperson",
       description:
-        "Access to assigned leads, owned companies and deals, personal tasks, shared inbox and calendar.",
+        "Access to assigned leads, owned companies and deals, personal tasks and calendar.",
       system: true,
     },
   });
@@ -148,7 +102,7 @@ async function main() {
     update: {
       name: "Programmer",
       description:
-        "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+        "Technical access to assigned CRM work, calendar and AI. No team or security administration.",
       system: true,
     },
     create: {
@@ -156,7 +110,7 @@ async function main() {
       key: "programmer",
       name: "Programmer",
       description:
-        "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+        "Technical access to assigned CRM work, calendar and AI. No team or security administration.",
       system: true,
     },
   });

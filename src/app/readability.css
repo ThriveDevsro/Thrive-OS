@@ -13,8 +13,8 @@ body{font-size:14px}
 .kanban-column{width:280px}.kanban-column>header strong,.kanban-column article>strong{font-size:13px!important}
 .kanban-column article>a,.kanban-column article>small,.kanban-column form select,.kanban-column form button{font-size:11px!important}
 .kanban-column article>b{font-size:15px!important}
-.analytics-cards span,.analytics-bar,.automation-list article div p,.automation-list article div small,.team-list article small,.team-list article p{font-size:11px!important}
-.analytics-cards strong,.analytics-grid h2,.automation-list article div strong,.team-list article strong{font-size:14px!important}
+.analytics-cards span,.analytics-bar,.team-list article small,.team-list article p{font-size:11px!important}
+.analytics-cards strong,.analytics-grid h2,.team-list article strong{font-size:14px!important}
 
 .lead-heading{margin-bottom:18px}.lead-tabs a{display:flex;align-items:center;gap:7px}.lead-toolbar{margin-bottom:14px}
 .lead-inbox{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}

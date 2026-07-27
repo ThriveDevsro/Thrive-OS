@@ -71,7 +71,7 @@ export async function ensureInitialAdmin(input: {
         key: "founder",
         name: "Founder / Super Admin",
         description:
-          "Full company access, team administration, settings, automations and audit history.",
+          "Full company access, team administration, settings and audit history.",
         system: true,
       },
     });
@@ -96,7 +96,7 @@ export async function ensureInitialAdmin(input: {
       update: {
         name: "Programmer",
         description:
-          "Technical access to assigned CRM work, calendar, AI and automations. No team or security administration.",
+          "Technical access to assigned CRM work, calendar and AI. No team or security administration.",
         system: true,
       },
       create: {
@@ -104,7 +104,7 @@ export async function ensureInitialAdmin(input: {
         key: "programmer",
         name: "Programmer",
         description:
-          "Technical access to assigned CRM work, calendar, AI and automations. No team or security administration.",
+          "Technical access to assigned CRM work, calendar and AI. No team or security administration.",
         system: true,
       },
     });

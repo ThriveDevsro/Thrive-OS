@@ -9,7 +9,6 @@ import {
   normalizeUrl,
 } from "./normalize";
 import type { LeadImportInput } from "./schema";
-import { emitAutomationEvent } from "@/lib/automations/engine";
 
 export type ImportResult = {
   duplicate: boolean;
@@ -272,37 +271,6 @@ export async function importLead(
     });
 
     if (!result.duplicate) {
-      const [lead, owner] = await Promise.all([
-        prisma.lead.findUnique({
-          where: { id: result.leadId },
-          select: {
-            id: true,
-            title: true,
-            companyId: true,
-            contactId: true,
-            assigneeId: true,
-          },
-        }),
-        prisma.user.findFirst({
-          where: { workspaceId: workspace.id, status: "ACTIVE" },
-          orderBy: { createdAt: "asc" },
-          select: { id: true },
-        }),
-      ]);
-      if (lead) {
-        await emitAutomationEvent({
-          workspaceId: workspace.id,
-          eventId: `lead:${lead.id}`,
-          event: "lead.created",
-          payload: {
-            leadId: lead.id,
-            ownerId: lead.assigneeId ?? owner?.id,
-            title: lead.title,
-            companyId: lead.companyId,
-            contactId: lead.contactId,
-          },
-        }).catch(() => undefined);
-      }
     }
     return result;
   } catch (error) {

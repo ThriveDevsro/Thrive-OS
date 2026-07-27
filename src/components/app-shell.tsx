@@ -19,7 +19,6 @@ import {
   Radar,
   Settings,
   UsersRound,
-  Workflow,
   X,
 } from "lucide-react";
 import {
@@ -42,7 +41,6 @@ const nav = [
   ["Calendar", "/calendar", CalendarDays],
   ["Analytics", "/analytics", BarChart3],
   ["Brand", "/brand", Palette],
-  ["Automations", "/automations", Workflow],
   ["Team", "/team", UsersRound],
   ["Settings", "/settings/connections", Settings],
 ] as const;
@@ -85,9 +83,7 @@ export function AppShell({
   const hiddenNavigation =
     role === "founder"
       ? []
-      : role === "programmer"
-        ? ["Team"]
-        : ["Automations", "Team"];
+      : ["Team"];
   const visibleNav = nav.filter(
     ([label]) => !hiddenNavigation.includes(label),
   );

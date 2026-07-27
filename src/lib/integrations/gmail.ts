@@ -5,7 +5,6 @@ import {
   encryptProviderTokens,
   oauthConfig,
 } from "./oauth";
-import { emitAutomationEvent } from "@/lib/automations/engine";
 import { buildMimeMessage } from "./mime";
 
 type GmailHeader = { name?: string; value?: string };
@@ -122,7 +121,7 @@ export async function syncGmailAccount(accountId: string) {
         senderAddress === account.address.toLowerCase()
           ? "OUTBOUND"
           : "INBOUND";
-      const savedThread = await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx) => {
         const thread = await tx.emailThread.upsert({
           where: {
             workspaceId_providerId: {
@@ -196,22 +195,6 @@ export async function syncGmailAccount(accountId: string) {
         }
         return thread;
       });
-      if (direction === "INBOUND") {
-        await emitAutomationEvent({
-          workspaceId: account.workspaceId,
-          eventId: `gmail:${message.id}`,
-          event: "email.received",
-          payload: {
-            ownerId: contact?.ownerId ?? account.userId,
-            title: subject,
-            companyId: contact?.companyId,
-            contactId: contact?.id,
-            opportunityId: contact?.company?.opportunities[0]?.id,
-            threadId: savedThread.id,
-            direction,
-          },
-        }).catch(() => undefined);
-      }
       imported += 1;
     }
     await prisma.emailAccount.update({

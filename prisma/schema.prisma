@@ -83,7 +83,6 @@ model Workspace {
   activities      Activity[]
   auditLogs       AuditLog[]
   leadSources     LeadSource[]
-  automations     Automation[]
   notifications   Notification[]
   savedViews      SavedView[]
   meetings        Meeting[]
@@ -557,37 +556,6 @@ model SavedView {
   columns     Json?
   shared      Boolean   @default(false)
   createdAt   DateTime  @default(now())
-}
-
-model Automation {
-  id          String          @id @default(uuid()) @db.Uuid
-  workspaceId String          @db.Uuid
-  workspace   Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  name        String
-  trigger     Json
-  conditions  Json            @default("[]")
-  actions     Json
-  active      Boolean         @default(false)
-  runs        AutomationRun[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-}
-
-model AutomationRun {
-  id           String     @id @default(uuid()) @db.Uuid
-  automationId String     @db.Uuid
-  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  eventId      String
-  eventType    String
-  status       String
-  input        Json
-  output       Json?
-  error        String?
-  startedAt    DateTime   @default(now())
-  completedAt  DateTime?
-
-  @@unique([automationId, eventId])
-  @@index([automationId, startedAt])
 }
 
 model Job {

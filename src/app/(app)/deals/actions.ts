@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { auth } from "../../../../auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { emitAutomationEvent } from "@/lib/automations/engine";
 export async function createOpportunity(formData: FormData) {
   const session = await auth();
   if (!session?.user) return;
@@ -105,17 +104,5 @@ export async function moveOpportunity(formData: FormData) {
     where: { id },
     data: { stageId, probability: stage.probability },
   });
-  await emitAutomationEvent({
-    workspaceId: workspace.id,
-    eventId: `deal-stage:${deal.id}:${stage.id}`,
-    event: "opportunity.stage_changed",
-    payload: {
-      ownerId: deal.ownerId ?? user.id,
-      title: deal.name,
-      companyId: deal.companyId,
-      opportunityId: deal.id,
-      stage: stage.key,
-    },
-  }).catch(() => undefined);
   revalidatePath("/deals");
 }

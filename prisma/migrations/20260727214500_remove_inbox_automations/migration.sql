@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS "AutomationRun";
+DROP TABLE IF EXISTS "Automation";

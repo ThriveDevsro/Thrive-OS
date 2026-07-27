@@ -14,7 +14,7 @@ export const activities = [
 
 export const tasks = [
   { title: "Follow up on CRM proposal", company: "Northpeak Logistics", due: "Today, 13:00", priority: "High" },
-  { title: "Review automation brief", company: "Tatry Foods", due: "Today, 15:30", priority: "Normal" },
+  { title: "Review project brief", company: "Tatry Foods", due: "Today, 15:30", priority: "Normal" },
   { title: "Prepare discovery agenda", company: "Brighton & Finch", due: "Tomorrow, 09:00", priority: "Normal" },
 ] as const;
 
