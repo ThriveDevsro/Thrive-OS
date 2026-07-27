@@ -3,8 +3,14 @@
   "name": "Thrive OS for Gmail",
   "version": "0.1.0",
   "description": "CRM context and sales actions inside Gmail.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://mail.google.com/*"],
+  "permissions": ["storage", "identity"],
+  "host_permissions": [
+    "https://mail.google.com/*",
+    "https://app.thrivedev.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],

@@ -96,6 +96,7 @@ model Workspace {
   emailThreads    EmailThread[]
   emailMessages   EmailMessage[]
   aiUsageEvents   AiUsageEvent[]
+  extensionTokens ExtensionToken[]
 }
 
 model User {
@@ -128,6 +129,7 @@ model User {
   aiActions           AIAction[]
   emailAccounts       EmailAccount[]
   aiUsageEvents       AiUsageEvent[]
+  extensionTokens     ExtensionToken[]
 
   @@unique([workspaceId, email])
   @@index([workspaceId, status])
@@ -147,6 +149,22 @@ model UserInvitation {
   createdAt   DateTime  @default(now())
 
   @@index([workspaceId, userId, expiresAt])
+}
+
+model ExtensionToken {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @db.Uuid
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash   String    @unique
+  label       String
+  expiresAt   DateTime
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, expiresAt])
 }
 
 model Role {
