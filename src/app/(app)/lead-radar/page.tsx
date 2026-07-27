@@ -29,7 +29,7 @@ type Params = {
   q?: string;
 };
 
-const supportedCountries = new Set(["SK", "CZ", "GB"]);
+const supportedCountryGroups = new Set(["SK_CZ", "GB"]);
 
 export default async function LeadRadarPage({
   searchParams,
@@ -42,12 +42,18 @@ export default async function LeadRadarPage({
   const status = params.status || (inbox ? "NEW" : "");
   const q = params.q?.trim() ?? "";
   const source = params.source ?? "";
-  const country = supportedCountries.has(params.country ?? "")
+  const country = supportedCountryGroups.has(params.country ?? "")
     ? params.country!
     : "";
+  const countryFilter =
+    country === "SK_CZ"
+      ? { country: { in: ["SK", "CZ"] } }
+      : country === "GB"
+        ? { country: "GB" }
+        : {};
   const leadFilters = {
     ...(q ? { title: { contains: q, mode: "insensitive" as const } } : {}),
-    ...(country ? { country } : {}),
+    ...countryFilter,
     ...(!founder ? { assigneeId: user.id } : {}),
   };
 
@@ -148,8 +154,7 @@ export default async function LeadRadarPage({
         )}
         <select name="country" defaultValue={country}>
           <option value="">All countries</option>
-          <option value="SK">SK</option>
-          <option value="CZ">CZ</option>
+          <option value="SK_CZ">SK + CZ</option>
           <option value="GB">UK</option>
         </select>
         <button>
