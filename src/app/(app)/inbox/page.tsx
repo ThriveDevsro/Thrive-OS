@@ -92,7 +92,7 @@ export default async function InboxPage({
               <Archive />
               Closed
             </Link>
-              <Link href="/connections">
+              <Link href="/settings/connections">
               <Settings2 />
               Connect email
             </Link>

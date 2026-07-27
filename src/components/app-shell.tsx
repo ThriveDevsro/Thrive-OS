@@ -10,7 +10,6 @@ import {
   BriefcaseBusiness,
   Building2,
   CalendarDays,
-  Cable,
   ChevronLeft,
   ChevronRight,
   Inbox,
@@ -42,7 +41,6 @@ const nav = [
   ["Companies", "/companies", Building2],
   ["Deals", "/deals", BriefcaseBusiness],
   ["Inbox", "/inbox", Inbox],
-  ["Connections", "/connections", Cable],
   ["Calendar", "/calendar", CalendarDays],
   ["Analytics", "/analytics", BarChart3],
   ["Brand", "/brand", Palette],
@@ -91,8 +89,8 @@ export function AppShell({
     role === "founder"
       ? []
       : role === "programmer"
-        ? ["Team", "Settings"]
-        : ["Automations", "Team", "Settings"];
+        ? ["Team"]
+        : ["Automations", "Team"];
   const visibleNav = nav.filter(
     ([label]) => !hiddenNavigation.includes(label),
   );

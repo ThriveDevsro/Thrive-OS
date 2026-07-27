@@ -20,20 +20,20 @@ export async function POST(
   });
   if (!account || account.provider !== "google") {
     return NextResponse.redirect(
-      new URL("/connections?connection=not-found", request.url),
+      new URL("/settings/connections?connection=not-found", request.url),
     );
   }
   try {
     const result = await syncGmailAccount(account.id);
     return NextResponse.redirect(
       new URL(
-        `/connections?connection=synced&imported=${result.imported}`,
+        `/settings/connections?connection=synced&imported=${result.imported}`,
         request.url,
       ),
     );
   } catch {
     return NextResponse.redirect(
-      new URL("/connections?connection=sync-failed", request.url),
+      new URL("/settings/connections?connection=sync-failed", request.url),
     );
   }
 }

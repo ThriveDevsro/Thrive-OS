@@ -15,7 +15,7 @@ export async function GET(
   const { provider: rawProvider } = await params;
   if (rawProvider !== "google" && rawProvider !== "microsoft") {
     return NextResponse.redirect(
-      new URL("/connections?connection=invalid", _request.url),
+      new URL("/settings/connections?connection=invalid", _request.url),
     );
   }
   try {
@@ -55,7 +55,7 @@ export async function GET(
   } catch (error) {
     const code = error instanceof AiError ? error.code : "AI_CONFIG_INVALID";
     return NextResponse.redirect(
-      new URL(`/connections?connection=${code}`, _request.url),
+      new URL(`/settings/connections?connection=${code}`, _request.url),
     );
   }
 }

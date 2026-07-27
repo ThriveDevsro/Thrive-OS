@@ -15,7 +15,7 @@ export async function GET(
   const { provider: rawProvider } = await params;
   if (rawProvider !== "google" && rawProvider !== "microsoft") {
     return NextResponse.redirect(
-      new URL("/connections?connection=invalid", request.url),
+      new URL("/settings/connections?connection=invalid", request.url),
     );
   }
   const provider = rawProvider as OAuthProvider;
@@ -120,11 +120,11 @@ export async function GET(
       });
     });
     return NextResponse.redirect(
-      new URL(`/connections?connection=${provider}-connected`, request.url),
+      new URL(`/settings/connections?connection=${provider}-connected`, request.url),
     );
   } catch {
     return NextResponse.redirect(
-      new URL("/connections?connection=failed", request.url),
+      new URL("/settings/connections?connection=failed", request.url),
     );
   }
 }

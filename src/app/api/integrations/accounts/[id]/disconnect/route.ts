@@ -41,6 +41,6 @@ export async function POST(
     ]);
   }
   return NextResponse.redirect(
-    new URL("/connections?connection=disconnected", request.url),
+    new URL("/settings/connections?connection=disconnected", request.url),
   );
 }
