@@ -10,11 +10,12 @@ type InvitationContent = {
   preview?: boolean;
 };
 
+const PRODUCTION_APP_URL = "https://app.thrivedev.co";
+
 export function resendConfigured() {
   return Boolean(
     process.env.RESEND_API_KEY &&
-      process.env.RESEND_FROM_EMAIL &&
-      process.env.APP_URL,
+      process.env.RESEND_FROM_EMAIL,
   );
 }
 
@@ -121,13 +122,25 @@ export async function sendTeamInvitationPreview(input: {
 function getEmailConfig() {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
-  const appUrl = process.env.APP_URL?.replace(/\/$/, "");
-  if (!apiKey || !from || !appUrl) {
+  const appUrl = resolveInvitationAppUrl(process.env.APP_URL);
+  if (!apiKey || !from) {
     throw new Error(
-      "Resend is not configured. Add RESEND_API_KEY, RESEND_FROM_EMAIL and APP_URL to .env.",
+      "Resend is not configured. Add RESEND_API_KEY and RESEND_FROM_EMAIL to .env.",
     );
   }
   return { apiKey, from, appUrl };
+}
+
+export function resolveInvitationAppUrl(configuredUrl?: string) {
+  if (!configuredUrl) return PRODUCTION_APP_URL;
+  try {
+    const url = new URL(configuredUrl);
+    const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
+    if (localHosts.has(url.hostname)) return PRODUCTION_APP_URL;
+    return url.origin;
+  } catch {
+    return PRODUCTION_APP_URL;
+  }
 }
 
 async function sendEmail(input: {

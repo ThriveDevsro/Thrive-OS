@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { buildTeamInvitationHtml } from "./resend";
+import {
+  buildTeamInvitationHtml,
+  resolveInvitationAppUrl,
+} from "./resend";
 
 describe("team invitation email", () => {
   it("renders the Thrive branding and invitation details", () => {
@@ -43,5 +46,15 @@ describe("team invitation email", () => {
     expect(html).toContain("&lt;script&gt;");
     expect(html).toContain("A &amp; B");
     expect(html).toContain("a=1&amp;b=&quot;2&quot;");
+  });
+
+  it("never uses localhost in invitation links", () => {
+    expect(resolveInvitationAppUrl("http://localhost:3001")).toBe(
+      "https://app.thrivedev.co",
+    );
+    expect(resolveInvitationAppUrl("http://127.0.0.1:3000")).toBe(
+      "https://app.thrivedev.co",
+    );
+    expect(resolveInvitationAppUrl()).toBe("https://app.thrivedev.co");
   });
 });
