@@ -15,25 +15,6 @@ export function extensionTokenExpiry(now = new Date()) {
   return new Date(now.getTime() + TOKEN_LIFETIME_MS);
 }
 
-export function validChromeRedirect(value: string | null) {
-  if (!value) return null;
-  try {
-    const url = new URL(value);
-    if (
-      url.protocol !== "https:" ||
-      !/^[a-p]{32}\.chromiumapp\.org$/.test(url.hostname) ||
-      url.pathname !== "/thrive"
-    ) {
-      return null;
-    }
-    url.search = "";
-    url.hash = "";
-    return url;
-  } catch {
-    return null;
-  }
-}
-
 export async function authenticateExtension(request: Request) {
   const authorization = request.headers.get("authorization");
   if (!authorization?.startsWith("Bearer ")) return null;
