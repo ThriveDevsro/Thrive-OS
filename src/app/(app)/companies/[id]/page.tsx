@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   Globe2,
   Mail,
+  Pencil,
   Phone,
   UserRound,
 } from "lucide-react";
@@ -67,6 +68,11 @@ export default async function CompanyPage({
           </p>
         </div>
         <div className="company-actions">
+          {founder && (
+            <Link href={`/companies/${company.id}/edit`}>
+              <Pencil size={15} /> Edit company
+            </Link>
+          )}
           <CompanyActivityModal companyId={company.id} teammates={teammates} />
         </div>
       </header>

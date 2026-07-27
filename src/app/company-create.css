@@ -25,3 +25,4 @@
   .company-create-form .form-actions{display:grid;grid-template-columns:1fr 1fr}
   .company-create-form .form-actions a,.company-create-form .form-actions button{justify-content:center}
 }
+.company-edit-actions{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;border-top:1px solid #edf0f4;margin-top:24px;padding-top:17px}.company-edit-actions .form-actions{margin:0;padding:0;border:0}.delete-company-button{height:35px;padding:0 12px;border:1px solid #fecaca;border-radius:7px;background:#fff;color:#b91c1c;display:flex;align-items:center;gap:6px;font-size:8px;font-weight:700}@media(max-width:650px){.company-edit-actions{align-items:stretch;flex-direction:column-reverse}.company-edit-actions .form-actions{justify-content:stretch}.company-edit-actions .form-actions>*{flex:1;justify-content:center}.delete-company-button{width:100%;justify-content:center}}
