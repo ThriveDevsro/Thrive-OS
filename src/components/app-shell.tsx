@@ -95,7 +95,7 @@ export function AppShell({
     ([label]) => !hiddenNavigation.includes(label),
   );
   const mobilePrimary = visibleNav.filter(([label]) =>
-    ["Dashboard", "Lead Radar", "Inbox"].includes(label),
+    ["Dashboard", "Lead Radar", "Inbox", "Calendar"].includes(label),
   );
   const mobilePrimaryHrefs = new Set(mobilePrimary.map(([, href]) => href));
   const moreActive = visibleNav.some(

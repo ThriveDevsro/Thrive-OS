@@ -1,5 +1,3 @@
-import { SettingsNav } from "./settings-nav";
-
 export default function SettingsLayout({
   children,
 }: {
@@ -10,13 +8,10 @@ export default function SettingsLayout({
       <div className="list-heading settings-heading">
         <div>
           <h1>Settings</h1>
-          <p>Workspace configuration, collection controls and audit history.</p>
+          <p>Controls for approved lead collection sources.</p>
         </div>
       </div>
-      <div className="settings-layout">
-        <SettingsNav />
-        <div className="settings-content">{children}</div>
-      </div>
+      <div className="settings-content settings-content-single">{children}</div>
     </>
   );
 }

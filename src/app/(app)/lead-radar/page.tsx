@@ -286,9 +286,9 @@ export default async function LeadRadarPage({
         </section>
         </>
       ) : (
-        <section className="data-card">
+        <section className="data-card lead-all-card">
           <div className="data-table-wrap">
-            <table className="data-table">
+            <table className="data-table lead-all-table">
               <thead>
                 <tr>
                   <th>Lead</th>
