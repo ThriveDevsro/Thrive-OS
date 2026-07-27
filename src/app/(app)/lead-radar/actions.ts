@@ -10,6 +10,7 @@ const input = z.object({
   description: z.string().trim().min(10, "Add a little more detail."),
   sourceUrl: z.string().url("Enter a valid source URL.").optional().or(z.literal("")).transform((value) => value || undefined),
   email: z.string().email("Enter a valid email.").optional().or(z.literal("")).transform((value) => value || undefined),
+  companyName: z.string().trim().max(160).optional().transform((value) => value || undefined),
   country: z.enum(["SK", "CZ", "GB"]),
   serviceCategory: z.string().min(2),
 });
@@ -48,10 +49,36 @@ export async function createManualLead(
           active: true,
         },
       });
+      let company = null;
+      let companyCreated = false;
+      if (parsed.data.companyName) {
+        company = await tx.company.findFirst({
+            where: {
+              workspaceId: ctx.workspace.id,
+              deletedAt: null,
+              name: {
+                equals: parsed.data.companyName,
+                mode: "insensitive",
+              },
+            },
+          });
+        if (!company) {
+          company = await tx.company.create({
+            data: {
+              workspaceId: ctx.workspace.id,
+              ownerId: ctx.user.id,
+              name: parsed.data.companyName,
+              country: parsed.data.country,
+            },
+          });
+          companyCreated = true;
+        }
+      }
       const lead = await tx.lead.create({
         data: {
           workspaceId: ctx.workspace.id,
           sourceId: manual.id,
+          companyId: company?.id,
           assigneeId: ctx.user.id,
           title: parsed.data.title,
           description: parsed.data.description,
@@ -102,6 +129,19 @@ export async function createManualLead(
           newValue: { title: lead.title },
         },
       });
+      if (company && companyCreated) {
+        await tx.auditLog.create({
+          data: {
+            workspaceId: ctx.workspace.id,
+            userId: ctx.user.id,
+            action: "company.created_from_lead",
+            recordType: "Company",
+            recordId: company.id,
+            source: "MANUAL",
+            newValue: { name: company.name, leadId: lead.id },
+          },
+        });
+      }
     });
   } catch {
     return { message: "The lead could not be saved. Please try again." };

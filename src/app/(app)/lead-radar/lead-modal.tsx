@@ -74,6 +74,14 @@ export function LeadModal() {
                 </summary>
                 <div>
                   <div className="quick-row">
+                    <span>Company</span>
+                    <input
+                      name="companyName"
+                      placeholder="Company name"
+                      aria-invalid={Boolean(field("companyName"))}
+                    />
+                  </div>
+                  <div className="quick-row">
                     <span>Source</span>
                     <input
                       name="sourceUrl"
