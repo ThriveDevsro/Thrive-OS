@@ -2,3 +2,30 @@
 .priority-lead-list>a>span svg{width:15px}
 @media(max-width:1050px){.dashboard-priority-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:750px){.dashboard-priority-grid{grid-template-columns:1fr 1fr}.priority-metric{grid-template-columns:32px minmax(0,1fr);padding:10px}.priority-metric>span{width:31px;height:31px}.priority-metric>svg{display:none}.priority-metric strong{font-size:13px}.priority-metric p{display:none}.role-dashboard-grid{grid-template-columns:1fr}.dashboard-activity{grid-column:auto}.today-tasks-panel>div>a{grid-template-columns:30px minmax(0,1fr) auto}.today-tasks-panel a>b{grid-column:2}.role-dashboard-heading{align-items:flex-start}}
+.dashboard-priority-grid{gap:12px;margin-bottom:16px}
+.priority-metric{grid-template-columns:42px minmax(0,1fr) 16px;gap:11px;padding:15px;border-radius:12px;box-shadow:0 1px 2px #00000008}
+.priority-metric>span{width:40px;height:40px;border-radius:10px}
+.priority-metric strong{font-size:17px;margin:3px 0}
+.role-dashboard-grid{grid-template-columns:minmax(0,1.3fr) minmax(310px,.7fr);gap:14px;align-items:start}
+.dashboard-panel-head{height:66px;padding:0 18px}
+.priority-lead-list>a{grid-template-columns:38px minmax(0,1fr) 15px;gap:10px;padding:12px 17px}
+.priority-lead-list>a>span{width:36px;height:36px;border-radius:10px}
+.pipeline-numbers{padding:16px 18px 8px}
+.live-pipeline-bars{padding:6px 18px 18px}
+.live-pipeline-bars>div{margin-top:11px}
+.live-pipeline-bars i{height:7px}
+.dashboard-meetings>div>a,.dashboard-activity>div>div{padding:11px 17px}
+.dashboard-meetings.full-width{grid-column:1/-1}
+.dashboard-activity{grid-column:auto}
+.dashboard-empty{min-height:140px}
+@media(max-width:750px){
+  .dashboard-priority-grid{grid-template-columns:1fr 1fr}
+  .priority-metric{grid-template-columns:32px minmax(0,1fr);padding:11px}
+  .priority-metric>span{width:32px;height:32px}
+  .priority-metric strong{font-size:14px}
+  .role-dashboard-grid{grid-template-columns:1fr}
+  .dashboard-meetings.full-width{grid-column:auto}
+}
+@media(max-width:1050px) and (min-width:751px){
+  .dashboard-priority-grid{grid-template-columns:repeat(2,1fr)}
+}

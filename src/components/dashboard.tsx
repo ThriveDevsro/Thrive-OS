@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   Inbox,
   Radar,
-  UsersRound,
 } from "lucide-react";
 
 type Props = {
@@ -55,28 +54,13 @@ export function Dashboard({
     <>
       <div className="page-heading role-dashboard-heading">
         <div>
-          <h1>
-            Good {dayPart()}, {firstName}.
-          </h1>
+          <h1>Dashboard</h1>
           <p>
             {founder
-              ? "Here is what needs attention across Thrive Dev today."
-              : "Your leads, deals and next actions for today."}
+              ? `Good ${dayPart()}, ${firstName}. Here is what needs attention across Thrive Dev today.`
+              : `Good ${dayPart()}, ${firstName}. Here are your leads, deals and next actions.`}
           </p>
         </div>
-        <span className="dashboard-scope">
-          {founder ? (
-            <>
-              <UsersRound />
-              Company view
-            </>
-          ) : (
-            <>
-              <UsersRound />
-              My work
-            </>
-          )}
-        </span>
       </div>
       <section className="dashboard-priority-grid">
         <Metric
@@ -187,7 +171,9 @@ export function Dashboard({
             <Empty icon={<BarChart3 />} text="No open deals yet." />
           )}
         </article>
-        <article className="panel dashboard-meetings">
+        <article
+          className={`panel dashboard-meetings ${founder ? "" : "full-width"}`}
+        >
           <DashboardHead
             title="Upcoming"
             subtitle="Meetings and company events"
