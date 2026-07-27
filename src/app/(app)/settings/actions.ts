@@ -96,4 +96,5 @@ export async function updateLeadSource(formData: FormData): Promise<void> {
     }),
   ]);
   revalidatePath("/settings");
+  revalidatePath("/settings/sources");
 }
