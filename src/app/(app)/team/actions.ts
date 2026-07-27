@@ -66,24 +66,49 @@ export async function addTeamMember(
       },
     }),
   ]);
-  if (existing) return { error: "A member with this email already exists." };
+  if (existing && existing.status !== "REMOVED")
+    return { error: "A member with this email already exists." };
   if (!role) return { error: "Selected role is not available." };
   const token=randomBytes(32).toString("base64url");
   const tokenHash=createHash("sha256").update(token).digest("hex");
   const user=await prisma.$transaction(async (tx) => {
-    const user = await tx.user.create({
-      data: {
-        workspaceId: context.workspace.id,
-        name: parsed.data.name,
-        email: parsed.data.email,
-        status: "INVITED",
-      },
-    });
+    const user = existing
+      ? await tx.user.update({
+          where: { id: existing.id },
+          data: {
+            name: parsed.data.name,
+            status: "INVITED",
+            passwordHash: null,
+          },
+        })
+      : await tx.user.create({
+          data: {
+            workspaceId: context.workspace.id,
+            name: parsed.data.name,
+            email: parsed.data.email,
+            status: "INVITED",
+          },
+        });
+    if (existing) {
+      await tx.userRole.deleteMany({ where: { userId: user.id } });
+      await tx.userInvitation.deleteMany({ where: { userId: user.id } });
+    }
     await tx.userRole.create({ data: { userId: user.id, roleId: role.id } });
     await tx.userInvitation.create({data:{workspaceId:context.workspace.id,userId:user.id,createdById:context.actor.id,tokenHash,expiresAt:new Date(Date.now()+24*60*60*1000)}});
     return user;
   });
-  try{await sendTeamInvitation({to:user.email,name:user.name,invitedBy:context.actor.name,token});}catch(error){await prisma.user.delete({where:{id:user.id}});return{error:error instanceof Error?`Invitation email failed: ${error.message}`:"Invitation email failed."};}
+  try{await sendTeamInvitation({to:user.email,name:user.name,invitedBy:context.actor.name,token});}catch(error){
+    if(existing){
+      await prisma.$transaction([
+        prisma.user.update({where:{id:user.id},data:{status:"REMOVED"}}),
+        prisma.userRole.deleteMany({where:{userId:user.id}}),
+        prisma.userInvitation.deleteMany({where:{userId:user.id}}),
+      ]);
+    }else{
+      await prisma.user.delete({where:{id:user.id}});
+    }
+    return{error:error instanceof Error?`Invitation email failed: ${error.message}`:"Invitation email failed."};
+  }
   await prisma.auditLog.create({data:{workspaceId:context.workspace.id,userId:context.actor.id,action:"user.invited",recordType:"User",recordId:user.id,source:"MANUAL",newValue:{email:user.email,role:role.key,expiresInHours:24}}});
   revalidatePath("/team");
   return { ok: "Invitation sent. The link expires in 24 hours." };
@@ -151,4 +176,68 @@ export async function updateTeamMember(formData: FormData) {
     });
   });
   revalidatePath("/team");
+}
+
+export async function removeTeamMember(
+  _: TeamState,
+  formData: FormData,
+): Promise<TeamState> {
+  const context = await founderContext();
+  if (!context) return { error: "Founder permission is required." };
+  const parsed = z
+    .object({ userId: z.string().uuid() })
+    .safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: "Invalid team member." };
+  if (parsed.data.userId === context.actor.id) {
+    return { error: "You cannot remove your own account." };
+  }
+  const member = await prisma.user.findFirst({
+    where: {
+      id: parsed.data.userId,
+      workspaceId: context.workspace.id,
+      status: { not: "REMOVED" },
+    },
+    include: { roles: { include: { role: true } } },
+  });
+  if (!member) return { error: "Team member was not found." };
+  const isFounder = member.roles.some((item) => item.role.key === "founder");
+  if (isFounder) {
+    const founderCount = await prisma.user.count({
+      where: {
+        workspaceId: context.workspace.id,
+        status: "ACTIVE",
+        roles: { some: { role: { key: "founder" } } },
+      },
+    });
+    if (founderCount <= 1) {
+      return { error: "The last active founder cannot be removed." };
+    }
+  }
+  await prisma.$transaction(async (tx) => {
+    await tx.user.update({
+      where: { id: member.id },
+      data: { status: "REMOVED" },
+    });
+    await tx.userInvitation.deleteMany({ where: { userId: member.id } });
+    await tx.userRole.deleteMany({ where: { userId: member.id } });
+    await tx.auditLog.create({
+      data: {
+        workspaceId: context.workspace.id,
+        userId: context.actor.id,
+        action: "user.removed",
+        recordType: "User",
+        recordId: member.id,
+        source: "MANUAL",
+        oldValue: {
+          name: member.name,
+          email: member.email,
+          status: member.status,
+          roles: member.roles.map((item) => item.role.key),
+        },
+        newValue: { status: "REMOVED" },
+      },
+    });
+  });
+  revalidatePath("/team");
+  return { ok: `${member.name} was removed from the workspace.` };
 }

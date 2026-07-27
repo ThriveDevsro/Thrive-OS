@@ -8,13 +8,14 @@ import {
 import { prisma } from "@/lib/prisma";
 import { updateTeamMember } from "./actions";
 import { MemberModal } from "./member-modal";
+import { RemoveMemberButton } from "./remove-member-button";
 import { requireFounder } from "@/lib/role-access";
 
 export default async function TeamPage() {
   const { session, workspace } = await requireFounder();
   const [users, roles] = await Promise.all([
     prisma.user.findMany({
-      where: { workspaceId: workspace?.id },
+      where: { workspaceId: workspace?.id, status: { not: "REMOVED" } },
       include: {
         roles: { include: { role: true } },
         _count: {
@@ -151,6 +152,12 @@ export default async function TeamPage() {
                 <i />
                 {user.status.toLowerCase()}
               </span>
+              {!self && (
+                <RemoveMemberButton
+                  userId={user.id}
+                  memberName={user.name}
+                />
+              )}
             </article>
           );
         })}
