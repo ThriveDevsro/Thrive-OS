@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Thrive OS for Gmail",
+  "version": "0.1.0",
+  "description": "CRM context and sales actions inside Gmail.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://mail.google.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

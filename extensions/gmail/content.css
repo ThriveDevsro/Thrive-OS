@@ -1,0 +1,143 @@
+.thrive-gmail-launcher {
+  position: fixed;
+  right: 18px;
+  bottom: 24px;
+  z-index: 2147483646;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #27272a;
+  border-radius: 13px;
+  background: #050505;
+  color: #fff;
+  box-shadow: 0 10px 30px #0003;
+  cursor: pointer;
+}
+.thrive-gmail-launcher span,
+.thrive-gmail-brand > span {
+  font: 800 16px/1 Arial, sans-serif;
+}
+.thrive-gmail-launcher.active {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+.thrive-gmail-panel {
+  position: fixed;
+  inset: 12px 12px 12px auto;
+  z-index: 2147483647;
+  width: min(360px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dedee3;
+  border-radius: 16px;
+  background: #fff;
+  color: #18181b;
+  box-shadow: 0 24px 70px #11182738;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+.thrive-gmail-panel header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 17px;
+  border-bottom: 1px solid #ececf0;
+}
+.thrive-gmail-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.thrive-gmail-brand > span {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #050505;
+  color: #fff;
+}
+.thrive-gmail-brand strong {
+  font-size: 14px;
+}
+.thrive-gmail-panel header button {
+  border: 0;
+  background: transparent;
+  color: #71717a;
+  font-size: 25px;
+  cursor: pointer;
+}
+.thrive-gmail-panel main {
+  flex: 1;
+  padding: 24px 18px;
+}
+.thrive-gmail-label {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .11em;
+}
+.thrive-gmail-panel h2 {
+  margin: 0;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.thrive-gmail-subject {
+  margin: 7px 0 22px;
+  color: #71717a;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.thrive-gmail-primary,
+.thrive-gmail-secondary {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  border-radius: 9px;
+  color: #fff !important;
+  background: #050505;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+.thrive-gmail-secondary {
+  border: 1px solid #dedee3;
+  background: #fff;
+  color: #3f3f46 !important;
+}
+.thrive-gmail-empty {
+  margin-top: 22vh;
+  text-align: center;
+}
+.thrive-gmail-empty > span {
+  display: block;
+  margin-bottom: 14px;
+  color: #2563eb;
+  font-size: 28px;
+}
+.thrive-gmail-empty p {
+  color: #71717a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.thrive-gmail-panel footer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px 18px;
+  border-top: 1px solid #ececf0;
+}
+.thrive-gmail-panel footer a {
+  color: #2563eb !important;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+.thrive-gmail-panel footer small {
+  color: #9a9aa1;
+  font-size: 9px;
+}
