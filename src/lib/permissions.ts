@@ -21,11 +21,23 @@ export const capabilities = [
 ] as const;
 
 export type Capability = (typeof capabilities)[number];
-export type SystemRole = "founder" | "salesperson";
+export type SystemRole = "founder" | "salesperson" | "programmer";
 
 const roleCapabilities: Record<SystemRole, readonly Capability[]> = {
   founder: capabilities,
   salesperson: [
+    "dashboard.read.owned",
+    "company.read.owned",
+    "company.update.owned",
+    "lead.read.owned",
+    "opportunity.update.owned",
+    "email.send",
+    "analytics.read.owned",
+    "ai.lead.analyze.owned",
+    "ai.analysis.approve",
+    "ai.copilot.use",
+  ],
+  programmer: [
     "dashboard.read.owned",
     "company.read.owned",
     "company.update.owned",

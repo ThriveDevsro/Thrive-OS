@@ -141,12 +141,43 @@ async function main() {
       system: true,
     },
   });
+  const programmer = await prisma.role.upsert({
+    where: {
+      workspaceId_key: { workspaceId: workspace.id, key: "programmer" },
+    },
+    update: {
+      name: "Programmer",
+      description:
+        "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+      system: true,
+    },
+    create: {
+      workspaceId: workspace.id,
+      key: "programmer",
+      name: "Programmer",
+      description:
+        "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+      system: true,
+    },
+  });
   const permissions = await prisma.permission.findMany();
   await prisma.rolePermission.createMany({
     data: permissions.map((permission) => ({
       roleId: founder.id,
       permissionId: permission.id,
     })),
+    skipDuplicates: true,
+  });
+  const programmerCapabilities = new Set(capabilitiesFor("programmer"));
+  await prisma.rolePermission.createMany({
+    data: permissions
+      .filter((permission) =>
+        programmerCapabilities.has(permission.key as never),
+      )
+      .map((permission) => ({
+        roleId: programmer.id,
+        permissionId: permission.id,
+      })),
     skipDuplicates: true,
   });
   const salespersonCapabilities = new Set(capabilitiesFor("salesperson"));

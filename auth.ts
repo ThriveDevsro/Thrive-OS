@@ -32,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
         const user = await prisma.user.findFirst({ where: { email: parsed.data.email.toLowerCase(), status: "ACTIVE" }, include: { workspace: true, roles: { include: { role: true } } } });
         if (!user?.passwordHash || !await compare(parsed.data.password, user.passwordHash)) return null;
-        return { id: user.id, email: user.email, name: user.name, role: user.roles.some(item => item.role.key === "founder") ? "founder" : "salesperson", workspaceId: user.workspaceId, workspace: user.workspace.name };
+        return { id: user.id, email: user.email, name: user.name, role: sessionRole(user.roles), workspaceId: user.workspaceId, workspace: user.workspace.name };
       },
     }),
   ],
@@ -50,9 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.sub = stored.id;
           token.workspaceId = stored.workspaceId;
           token.workspace = stored.workspace.name;
-          token.role = stored.roles.some(({ role }) => role.key === "founder")
-            ? "founder"
-            : "salesperson";
+          token.role = sessionRole(stored.roles);
         }
       }
       token.role ??= "salesperson";
@@ -61,7 +59,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub ?? "";
-        session.user.role = token.role === "salesperson" ? "salesperson" : "founder";
+        session.user.role =
+          token.role === "founder" || token.role === "programmer"
+            ? token.role
+            : "salesperson";
         session.user.workspaceId = typeof token.workspaceId === "string" ? token.workspaceId : "";
         session.user.workspace = typeof token.workspace === "string" ? token.workspace : "";
       }
@@ -69,3 +70,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
+
+function sessionRole(
+  roles: Array<{ role: { key: string } }>,
+): "founder" | "salesperson" | "programmer" {
+  if (roles.some(({ role }) => role.key === "founder")) return "founder";
+  if (roles.some(({ role }) => role.key === "programmer")) return "programmer";
+  return "salesperson";
+}

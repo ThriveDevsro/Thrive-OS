@@ -13,7 +13,7 @@ import {
 
 type Props = {
   firstName: string;
-  role: "founder" | "salesperson";
+  role: "founder" | "salesperson" | "programmer";
   metrics: {
     companyCount: number;
     attentionLeads: number;

@@ -75,7 +75,7 @@ export async function ensureInitialAdmin(input: {
         system: true,
       },
     });
-    await tx.role.upsert({
+    const salesperson = await tx.role.upsert({
       where: {
         workspaceId_key: { workspaceId: workspace.id, key: "salesperson" },
       },
@@ -89,18 +89,45 @@ export async function ensureInitialAdmin(input: {
         system: true,
       },
     });
+    const programmer = await tx.role.upsert({
+      where: {
+        workspaceId_key: { workspaceId: workspace.id, key: "programmer" },
+      },
+      update: {
+        name: "Programmer",
+        description:
+          "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+        system: true,
+      },
+      create: {
+        workspaceId: workspace.id,
+        key: "programmer",
+        name: "Programmer",
+        description:
+          "Technical access to assigned CRM work, shared inbox, calendar, AI and automations. No team or security administration.",
+        system: true,
+      },
+    });
 
     const permissions = await tx.permission.findMany({
-      where: { key: { in: [...capabilitiesFor("founder")] } },
-      select: { id: true },
+      select: { id: true, key: true },
     });
-    await tx.rolePermission.createMany({
-      data: permissions.map((permission) => ({
-        roleId: founder.id,
-        permissionId: permission.id,
-      })),
-      skipDuplicates: true,
-    });
+    for (const [roleId, roleKey] of [
+      [founder.id, "founder"],
+      [salesperson.id, "salesperson"],
+      [programmer.id, "programmer"],
+    ] as const) {
+      const allowed = new Set(capabilitiesFor(roleKey));
+      await tx.rolePermission.createMany({
+        data: permissions
+          .filter((permission) => allowed.has(permission.key as never))
+          .map((permission) => ({
+            roleId,
+            permissionId: permission.id,
+          })),
+        skipDuplicates: true,
+      });
+    }
 
     const user = existingUser
       ? await tx.user.update({

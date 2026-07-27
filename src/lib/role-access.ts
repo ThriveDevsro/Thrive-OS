@@ -37,3 +37,12 @@ export async function requireFounder() {
   if (!context.founder) redirect("/dashboard");
   return context;
 }
+
+export async function requireTechnicalAdmin() {
+  const context = await getAccessContext();
+  const technical = context.user.roles.some(({ role }) =>
+    ["founder", "programmer"].includes(role.key),
+  );
+  if (!technical) redirect("/dashboard");
+  return context;
+}

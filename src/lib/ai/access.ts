@@ -30,7 +30,6 @@ export async function getAiAccessContext() {
     select: { id: true },
   });
   if (!user) throw new AiError("AI_PERMISSION_DENIED", 403);
-  const role: SystemRole =
-    session.user.role === "founder" ? "founder" : "salesperson";
+  const role: SystemRole = session.user.role;
   return { workspaceId, userId: user.id, role };
 }

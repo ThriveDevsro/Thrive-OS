@@ -66,7 +66,7 @@ export function AppShell({
   children: React.ReactNode;
   userName: string;
   userEmail: string;
-  role: "founder" | "salesperson";
+  role: "founder" | "salesperson" | "programmer";
   aiEnabled: boolean;
   initialSidebarCollapsed: boolean | null;
 }) {
@@ -83,12 +83,15 @@ export function AppShell({
     pendingNavigation?.from === pathname && pendingNavigation.to !== pathname;
   const active = (href: string) =>
     displayedPathname === href || displayedPathname.startsWith(`${href}/`);
-  const visibleNav =
+  const hiddenNavigation =
     role === "founder"
-      ? nav
-      : nav.filter(
-          ([label]) => !["Automations", "Team", "Settings"].includes(label),
-        );
+      ? []
+      : role === "programmer"
+        ? ["Team", "Settings"]
+        : ["Automations", "Team", "Settings"];
+  const visibleNav = nav.filter(
+    ([label]) => !hiddenNavigation.includes(label),
+  );
   const mobilePrimary = visibleNav.filter(([label]) =>
     ["Dashboard", "Lead Radar", "Inbox"].includes(label),
   );
